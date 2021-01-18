@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * @author liufan E-mail:fan.liu@biz-united.com.cn
  * @version 创建时间：2021/1/18
- * 订单实体类
+ * 图书订单实体类
  */
 public class BookstoreOrder {
     /**
@@ -13,11 +13,11 @@ public class BookstoreOrder {
      */
     private Long id;
     /**
-     * 订单总共金额
+     * 订单的所有金额
      */
     private BigDecimal tbBookstoreOrderTotalMoney;
     /**
-     * 订单收货地址
+     * 订单的收货地址
      */
     private String tbBookstoreOrderShippingAddress;
     /**
@@ -25,7 +25,7 @@ public class BookstoreOrder {
      */
     private Date tbBookstoreOrderCreateTime;
     /**
-     * 修改时间
+     * 更新时间
      */
     private Date tbBookstoreOrderUpdateTime;
 

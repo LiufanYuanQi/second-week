@@ -4,28 +4,52 @@ import java.util.Date;
 /**
  * @author liufan E-mail:fan.liu@biz-united.com.cn
  * @version 创建时间：2021/1/18
+ * 用户实体类
  */
 public class BookstoreUser {
+    /**
+     * 用户id
+     */
     private Long id;
-
+    /**
+     * 用户名
+     */
     private String tbBookstoreUserName;
-
+    /**
+     * 用户密码
+     */
     private String tbBookstoreUserPassword;
-
+    /**
+     * 用户真实姓名
+     */
     private String tbBookstoreUserRealName;
-
+    /**
+     * 用户手机号
+     */
     private String tbBookstoreUserPhone;
-
+    /**
+     * 用户邮箱
+     */
     private String tbBookstoreUserEmail;
-
+    /**
+     * 用户所在城市id，关联表think_province
+     */
     private Long tbBookstoreUserCityId;
-
+    /**
+     * 用户地址
+     */
     private String tbBookstoreUserAddress;
-
+    /**
+     * 用户爱好
+     */
     private String tbBookstoreUserHobby;
-
+    /**
+     * 创建时间
+     */
     private Date tbBookstoreUserCreateTime;
-
+    /**
+     * 修改时间
+     */
     private Date tbBookstoreUserUpdateTime;
 
     public Long getId() {

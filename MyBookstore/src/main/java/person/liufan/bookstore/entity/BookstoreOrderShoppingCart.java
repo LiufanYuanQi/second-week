@@ -4,16 +4,28 @@ import java.util.Date;
 /**
  * @author liufan E-mail:fan.liu@biz-united.com.cn
  * @version 创建时间：2021/1/18
+ * 订单关联商品id实体类
  */
 public class BookstoreOrderShoppingCart {
+    /**
+     * 订单关联的商品id
+     */
     private Long id;
-
+    /**
+     * 该订单中存在的图书id
+     */
     private Long tbBookstoreOrderTbscBookId;
-
+    /**
+     * 该订单中存在的图书总数
+     */
     private Integer tbBookstoreOrderTbscBookCount;
-
+    /**
+     * 创建时间
+     */
     private Date tbBookstoreOrderTbscCreateTime;
-
+    /**
+     * 修改时间
+     */
     private Date tbBookstoreOrderTbscUpdateTime;
 
     public Long getId() {
