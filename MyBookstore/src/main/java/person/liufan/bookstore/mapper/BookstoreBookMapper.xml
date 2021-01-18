@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="person.liufan.bookstore.mapper.BookstoreBookMapper">
+  <resultMap id="BaseResultMap" type="person.liufan.bookstore.entity.BookstoreBook">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="tb_bookstore_book_name" jdbcType="VARCHAR" property="tbBookstoreBookName" />
+    <result column="tb_bookstore_book_author" jdbcType="VARCHAR" property="tbBookstoreBookAuthor" />
+    <result column="tb_bookstore_book_publishing" jdbcType="VARCHAR" property="tbBookstoreBookPublishing" />
+    <result column="tb_bookstore_book_price" jdbcType="DECIMAL" property="tbBookstoreBookPrice" />
+    <result column="tb_bookstore_book_number" jdbcType="INTEGER" property="tbBookstoreBookNumber" />
+    <result column="tb_bookstore_book_info" jdbcType="VARCHAR" property="tbBookstoreBookInfo" />
+    <result column="tb_bookstore_book_picture_url" jdbcType="VARCHAR" property="tbBookstoreBookPictureUrl" />
+    <result column="tb_bookstore_book_create_time" jdbcType="TIMESTAMP" property="tbBookstoreBookCreateTime" />
+    <result column="tb_bookstore_book_update_time" jdbcType="TIMESTAMP" property="tbBookstoreBookUpdateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, tb_bookstore_book_name, tb_bookstore_book_author, tb_bookstore_book_publishing, 
+    tb_bookstore_book_price, tb_bookstore_book_number, tb_bookstore_book_info, tb_bookstore_book_picture_url, 
+    tb_bookstore_book_create_time, tb_bookstore_book_update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_bookstore_book
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from tb_bookstore_book
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="person.liufan.bookstore.entity.BookstoreBook">
+    insert into tb_bookstore_book (id, tb_bookstore_book_name, tb_bookstore_book_author, 
+      tb_bookstore_book_publishing, tb_bookstore_book_price, 
+      tb_bookstore_book_number, tb_bookstore_book_info, 
+      tb_bookstore_book_picture_url, tb_bookstore_book_create_time, 
+      tb_bookstore_book_update_time)
+    values (#{id,jdbcType=BIGINT}, #{tbBookstoreBookName,jdbcType=VARCHAR}, #{tbBookstoreBookAuthor,jdbcType=VARCHAR}, 
+      #{tbBookstoreBookPublishing,jdbcType=VARCHAR}, #{tbBookstoreBookPrice,jdbcType=DECIMAL}, 
+      #{tbBookstoreBookNumber,jdbcType=INTEGER}, #{tbBookstoreBookInfo,jdbcType=VARCHAR}, 
+      #{tbBookstoreBookPictureUrl,jdbcType=VARCHAR}, #{tbBookstoreBookCreateTime,jdbcType=TIMESTAMP}, 
+      #{tbBookstoreBookUpdateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="person.liufan.bookstore.entity.BookstoreBook">
+    insert into tb_bookstore_book
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="tbBookstoreBookName != null">
+        tb_bookstore_book_name,
+      </if>
+      <if test="tbBookstoreBookAuthor != null">
+        tb_bookstore_book_author,
+      </if>
+      <if test="tbBookstoreBookPublishing != null">
+        tb_bookstore_book_publishing,
+      </if>
+      <if test="tbBookstoreBookPrice != null">
+        tb_bookstore_book_price,
+      </if>
+      <if test="tbBookstoreBookNumber != null">
+        tb_bookstore_book_number,
+      </if>
+      <if test="tbBookstoreBookInfo != null">
+        tb_bookstore_book_info,
+      </if>
+      <if test="tbBookstoreBookPictureUrl != null">
+        tb_bookstore_book_picture_url,
+      </if>
+      <if test="tbBookstoreBookCreateTime != null">
+        tb_bookstore_book_create_time,
+      </if>
+      <if test="tbBookstoreBookUpdateTime != null">
+        tb_bookstore_book_update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="tbBookstoreBookName != null">
+        #{tbBookstoreBookName,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreBookAuthor != null">
+        #{tbBookstoreBookAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreBookPublishing != null">
+        #{tbBookstoreBookPublishing,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreBookPrice != null">
+        #{tbBookstoreBookPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="tbBookstoreBookNumber != null">
+        #{tbBookstoreBookNumber,jdbcType=INTEGER},
+      </if>
+      <if test="tbBookstoreBookInfo != null">
+        #{tbBookstoreBookInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreBookPictureUrl != null">
+        #{tbBookstoreBookPictureUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreBookCreateTime != null">
+        #{tbBookstoreBookCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tbBookstoreBookUpdateTime != null">
+        #{tbBookstoreBookUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="person.liufan.bookstore.entity.BookstoreBook">
+    update tb_bookstore_book
+    <set>
+      <if test="tbBookstoreBookName != null">
+        tb_bookstore_book_name = #{tbBookstoreBookName,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreBookAuthor != null">
+        tb_bookstore_book_author = #{tbBookstoreBookAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreBookPublishing != null">
+        tb_bookstore_book_publishing = #{tbBookstoreBookPublishing,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreBookPrice != null">
+        tb_bookstore_book_price = #{tbBookstoreBookPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="tbBookstoreBookNumber != null">
+        tb_bookstore_book_number = #{tbBookstoreBookNumber,jdbcType=INTEGER},
+      </if>
+      <if test="tbBookstoreBookInfo != null">
+        tb_bookstore_book_info = #{tbBookstoreBookInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreBookPictureUrl != null">
+        tb_bookstore_book_picture_url = #{tbBookstoreBookPictureUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreBookCreateTime != null">
+        tb_bookstore_book_create_time = #{tbBookstoreBookCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tbBookstoreBookUpdateTime != null">
+        tb_bookstore_book_update_time = #{tbBookstoreBookUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="person.liufan.bookstore.entity.BookstoreBook">
+    update tb_bookstore_book
+    set tb_bookstore_book_name = #{tbBookstoreBookName,jdbcType=VARCHAR},
+      tb_bookstore_book_author = #{tbBookstoreBookAuthor,jdbcType=VARCHAR},
+      tb_bookstore_book_publishing = #{tbBookstoreBookPublishing,jdbcType=VARCHAR},
+      tb_bookstore_book_price = #{tbBookstoreBookPrice,jdbcType=DECIMAL},
+      tb_bookstore_book_number = #{tbBookstoreBookNumber,jdbcType=INTEGER},
+      tb_bookstore_book_info = #{tbBookstoreBookInfo,jdbcType=VARCHAR},
+      tb_bookstore_book_picture_url = #{tbBookstoreBookPictureUrl,jdbcType=VARCHAR},
+      tb_bookstore_book_create_time = #{tbBookstoreBookCreateTime,jdbcType=TIMESTAMP},
+      tb_bookstore_book_update_time = #{tbBookstoreBookUpdateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

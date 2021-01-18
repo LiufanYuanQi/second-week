@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="person.liufan.bookstore.mapper.BookstoreAdminMapper">
+  <resultMap id="BaseResultMap" type="person.liufan.bookstore.entity.BookstoreAdmin">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="tb_bookstore_admin_name" jdbcType="VARCHAR" property="tbBookstoreAdminName" />
+    <result column="tb_bookstore_admin_password" jdbcType="VARCHAR" property="tbBookstoreAdminPassword" />
+    <result column="tb_bookstore_admin_create_time" jdbcType="TIMESTAMP" property="tbBookstoreAdminCreateTime" />
+    <result column="tb_bookstore_admin_update_time" jdbcType="TIMESTAMP" property="tbBookstoreAdminUpdateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, tb_bookstore_admin_name, tb_bookstore_admin_password, tb_bookstore_admin_create_time, 
+    tb_bookstore_admin_update_time
+  </sql>
+  <select id="listAdmin" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_bookstore_admin
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_bookstore_admin
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from tb_bookstore_admin
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="person.liufan.bookstore.entity.BookstoreAdmin">
+    insert into tb_bookstore_admin (id, tb_bookstore_admin_name, tb_bookstore_admin_password, 
+      tb_bookstore_admin_create_time, tb_bookstore_admin_update_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{tbBookstoreAdminName,jdbcType=VARCHAR}, #{tbBookstoreAdminPassword,jdbcType=VARCHAR}, 
+      #{tbBookstoreAdminCreateTime,jdbcType=TIMESTAMP}, #{tbBookstoreAdminUpdateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="person.liufan.bookstore.entity.BookstoreAdmin">
+    insert into tb_bookstore_admin
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="tbBookstoreAdminName != null">
+        tb_bookstore_admin_name,
+      </if>
+      <if test="tbBookstoreAdminPassword != null">
+        tb_bookstore_admin_password,
+      </if>
+      <if test="tbBookstoreAdminCreateTime != null">
+        tb_bookstore_admin_create_time,
+      </if>
+      <if test="tbBookstoreAdminUpdateTime != null">
+        tb_bookstore_admin_update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="tbBookstoreAdminName != null">
+        #{tbBookstoreAdminName,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreAdminPassword != null">
+        #{tbBookstoreAdminPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreAdminCreateTime != null">
+        #{tbBookstoreAdminCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tbBookstoreAdminUpdateTime != null">
+        #{tbBookstoreAdminUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="person.liufan.bookstore.entity.BookstoreAdmin">
+    update tb_bookstore_admin
+    <set>
+      <if test="tbBookstoreAdminName != null">
+        tb_bookstore_admin_name = #{tbBookstoreAdminName,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreAdminPassword != null">
+        tb_bookstore_admin_password = #{tbBookstoreAdminPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreAdminCreateTime != null">
+        tb_bookstore_admin_create_time = #{tbBookstoreAdminCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tbBookstoreAdminUpdateTime != null">
+        tb_bookstore_admin_update_time = #{tbBookstoreAdminUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="person.liufan.bookstore.entity.BookstoreAdmin">
+    update tb_bookstore_admin
+    set tb_bookstore_admin_name = #{tbBookstoreAdminName,jdbcType=VARCHAR},
+      tb_bookstore_admin_password = #{tbBookstoreAdminPassword,jdbcType=VARCHAR},
+      tb_bookstore_admin_create_time = #{tbBookstoreAdminCreateTime,jdbcType=TIMESTAMP},
+      tb_bookstore_admin_update_time = #{tbBookstoreAdminUpdateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

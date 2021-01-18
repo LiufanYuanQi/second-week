@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="person.liufan.bookstore.mapper.BookstoreUserMapper">
+  <resultMap id="BaseResultMap" type="person.liufan.bookstore.entity.BookstoreUser">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="tb_bookstore_user_name" jdbcType="VARCHAR" property="tbBookstoreUserName" />
+    <result column="tb_bookstore_user_password" jdbcType="VARCHAR" property="tbBookstoreUserPassword" />
+    <result column="tb_bookstore_user_real_name" jdbcType="VARCHAR" property="tbBookstoreUserRealName" />
+    <result column="tb_bookstore_user_phone" jdbcType="VARCHAR" property="tbBookstoreUserPhone" />
+    <result column="tb_bookstore_user_email" jdbcType="VARCHAR" property="tbBookstoreUserEmail" />
+    <result column="tb_bookstore_user_city_id" jdbcType="BIGINT" property="tbBookstoreUserCityId" />
+    <result column="tb_bookstore_user_address" jdbcType="VARCHAR" property="tbBookstoreUserAddress" />
+    <result column="tb_bookstore_user_hobby" jdbcType="VARCHAR" property="tbBookstoreUserHobby" />
+    <result column="tb_bookstore_user_create_time" jdbcType="TIMESTAMP" property="tbBookstoreUserCreateTime" />
+    <result column="tb_bookstore_user_update_time" jdbcType="TIMESTAMP" property="tbBookstoreUserUpdateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, tb_bookstore_user_name, tb_bookstore_user_password, tb_bookstore_user_real_name, 
+    tb_bookstore_user_phone, tb_bookstore_user_email, tb_bookstore_user_city_id, tb_bookstore_user_address, 
+    tb_bookstore_user_hobby, tb_bookstore_user_create_time, tb_bookstore_user_update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_bookstore_user
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from tb_bookstore_user
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="person.liufan.bookstore.entity.BookstoreUser">
+    insert into tb_bookstore_user (id, tb_bookstore_user_name, tb_bookstore_user_password, 
+      tb_bookstore_user_real_name, tb_bookstore_user_phone, 
+      tb_bookstore_user_email, tb_bookstore_user_city_id, 
+      tb_bookstore_user_address, tb_bookstore_user_hobby, 
+      tb_bookstore_user_create_time, tb_bookstore_user_update_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{tbBookstoreUserName,jdbcType=VARCHAR}, #{tbBookstoreUserPassword,jdbcType=VARCHAR}, 
+      #{tbBookstoreUserRealName,jdbcType=VARCHAR}, #{tbBookstoreUserPhone,jdbcType=VARCHAR}, 
+      #{tbBookstoreUserEmail,jdbcType=VARCHAR}, #{tbBookstoreUserCityId,jdbcType=BIGINT}, 
+      #{tbBookstoreUserAddress,jdbcType=VARCHAR}, #{tbBookstoreUserHobby,jdbcType=VARCHAR}, 
+      #{tbBookstoreUserCreateTime,jdbcType=TIMESTAMP}, #{tbBookstoreUserUpdateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="person.liufan.bookstore.entity.BookstoreUser">
+    insert into tb_bookstore_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="tbBookstoreUserName != null">
+        tb_bookstore_user_name,
+      </if>
+      <if test="tbBookstoreUserPassword != null">
+        tb_bookstore_user_password,
+      </if>
+      <if test="tbBookstoreUserRealName != null">
+        tb_bookstore_user_real_name,
+      </if>
+      <if test="tbBookstoreUserPhone != null">
+        tb_bookstore_user_phone,
+      </if>
+      <if test="tbBookstoreUserEmail != null">
+        tb_bookstore_user_email,
+      </if>
+      <if test="tbBookstoreUserCityId != null">
+        tb_bookstore_user_city_id,
+      </if>
+      <if test="tbBookstoreUserAddress != null">
+        tb_bookstore_user_address,
+      </if>
+      <if test="tbBookstoreUserHobby != null">
+        tb_bookstore_user_hobby,
+      </if>
+      <if test="tbBookstoreUserCreateTime != null">
+        tb_bookstore_user_create_time,
+      </if>
+      <if test="tbBookstoreUserUpdateTime != null">
+        tb_bookstore_user_update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="tbBookstoreUserName != null">
+        #{tbBookstoreUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreUserPassword != null">
+        #{tbBookstoreUserPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreUserRealName != null">
+        #{tbBookstoreUserRealName,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreUserPhone != null">
+        #{tbBookstoreUserPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreUserEmail != null">
+        #{tbBookstoreUserEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreUserCityId != null">
+        #{tbBookstoreUserCityId,jdbcType=BIGINT},
+      </if>
+      <if test="tbBookstoreUserAddress != null">
+        #{tbBookstoreUserAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreUserHobby != null">
+        #{tbBookstoreUserHobby,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreUserCreateTime != null">
+        #{tbBookstoreUserCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tbBookstoreUserUpdateTime != null">
+        #{tbBookstoreUserUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="person.liufan.bookstore.entity.BookstoreUser">
+    update tb_bookstore_user
+    <set>
+      <if test="tbBookstoreUserName != null">
+        tb_bookstore_user_name = #{tbBookstoreUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreUserPassword != null">
+        tb_bookstore_user_password = #{tbBookstoreUserPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreUserRealName != null">
+        tb_bookstore_user_real_name = #{tbBookstoreUserRealName,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreUserPhone != null">
+        tb_bookstore_user_phone = #{tbBookstoreUserPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreUserEmail != null">
+        tb_bookstore_user_email = #{tbBookstoreUserEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreUserCityId != null">
+        tb_bookstore_user_city_id = #{tbBookstoreUserCityId,jdbcType=BIGINT},
+      </if>
+      <if test="tbBookstoreUserAddress != null">
+        tb_bookstore_user_address = #{tbBookstoreUserAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreUserHobby != null">
+        tb_bookstore_user_hobby = #{tbBookstoreUserHobby,jdbcType=VARCHAR},
+      </if>
+      <if test="tbBookstoreUserCreateTime != null">
+        tb_bookstore_user_create_time = #{tbBookstoreUserCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tbBookstoreUserUpdateTime != null">
+        tb_bookstore_user_update_time = #{tbBookstoreUserUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="person.liufan.bookstore.entity.BookstoreUser">
+    update tb_bookstore_user
+    set tb_bookstore_user_name = #{tbBookstoreUserName,jdbcType=VARCHAR},
+      tb_bookstore_user_password = #{tbBookstoreUserPassword,jdbcType=VARCHAR},
+      tb_bookstore_user_real_name = #{tbBookstoreUserRealName,jdbcType=VARCHAR},
+      tb_bookstore_user_phone = #{tbBookstoreUserPhone,jdbcType=VARCHAR},
+      tb_bookstore_user_email = #{tbBookstoreUserEmail,jdbcType=VARCHAR},
+      tb_bookstore_user_city_id = #{tbBookstoreUserCityId,jdbcType=BIGINT},
+      tb_bookstore_user_address = #{tbBookstoreUserAddress,jdbcType=VARCHAR},
+      tb_bookstore_user_hobby = #{tbBookstoreUserHobby,jdbcType=VARCHAR},
+      tb_bookstore_user_create_time = #{tbBookstoreUserCreateTime,jdbcType=TIMESTAMP},
+      tb_bookstore_user_update_time = #{tbBookstoreUserUpdateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="person.liufan.bookstore.mapper.BookstoreShoppingCartMapper">
+  <resultMap id="BaseResultMap" type="person.liufan.bookstore.entity.BookstoreShoppingCart">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="tb_bookstore_shopping_cart_user_id" jdbcType="BIGINT" property="tbBookstoreShoppingCartUserId" />
+    <result column="tb_bookstore_shopping_cart_book_id" jdbcType="BIGINT" property="tbBookstoreShoppingCartBookId" />
+    <result column="tb_bookstore_shopping_cart_book_count" jdbcType="INTEGER" property="tbBookstoreShoppingCartBookCount" />
+    <result column="tb_bookstore_shopping_cart_create_time" jdbcType="TIMESTAMP" property="tbBookstoreShoppingCartCreateTime" />
+    <result column="tb_bookstore_shopping_cart_update_time" jdbcType="TIMESTAMP" property="tbBookstoreShoppingCartUpdateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, tb_bookstore_shopping_cart_user_id, tb_bookstore_shopping_cart_book_id, tb_bookstore_shopping_cart_book_count, 
+    tb_bookstore_shopping_cart_create_time, tb_bookstore_shopping_cart_update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_bookstore_shopping_cart
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from tb_bookstore_shopping_cart
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="person.liufan.bookstore.entity.BookstoreShoppingCart">
+    insert into tb_bookstore_shopping_cart (id, tb_bookstore_shopping_cart_user_id, 
+      tb_bookstore_shopping_cart_book_id, tb_bookstore_shopping_cart_book_count, 
+      tb_bookstore_shopping_cart_create_time, tb_bookstore_shopping_cart_update_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{tbBookstoreShoppingCartUserId,jdbcType=BIGINT}, 
+      #{tbBookstoreShoppingCartBookId,jdbcType=BIGINT}, #{tbBookstoreShoppingCartBookCount,jdbcType=INTEGER}, 
+      #{tbBookstoreShoppingCartCreateTime,jdbcType=TIMESTAMP}, #{tbBookstoreShoppingCartUpdateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="person.liufan.bookstore.entity.BookstoreShoppingCart">
+    insert into tb_bookstore_shopping_cart
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="tbBookstoreShoppingCartUserId != null">
+        tb_bookstore_shopping_cart_user_id,
+      </if>
+      <if test="tbBookstoreShoppingCartBookId != null">
+        tb_bookstore_shopping_cart_book_id,
+      </if>
+      <if test="tbBookstoreShoppingCartBookCount != null">
+        tb_bookstore_shopping_cart_book_count,
+      </if>
+      <if test="tbBookstoreShoppingCartCreateTime != null">
+        tb_bookstore_shopping_cart_create_time,
+      </if>
+      <if test="tbBookstoreShoppingCartUpdateTime != null">
+        tb_bookstore_shopping_cart_update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="tbBookstoreShoppingCartUserId != null">
+        #{tbBookstoreShoppingCartUserId,jdbcType=BIGINT},
+      </if>
+      <if test="tbBookstoreShoppingCartBookId != null">
+        #{tbBookstoreShoppingCartBookId,jdbcType=BIGINT},
+      </if>
+      <if test="tbBookstoreShoppingCartBookCount != null">
+        #{tbBookstoreShoppingCartBookCount,jdbcType=INTEGER},
+      </if>
+      <if test="tbBookstoreShoppingCartCreateTime != null">
+        #{tbBookstoreShoppingCartCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tbBookstoreShoppingCartUpdateTime != null">
+        #{tbBookstoreShoppingCartUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="person.liufan.bookstore.entity.BookstoreShoppingCart">
+    update tb_bookstore_shopping_cart
+    <set>
+      <if test="tbBookstoreShoppingCartUserId != null">
+        tb_bookstore_shopping_cart_user_id = #{tbBookstoreShoppingCartUserId,jdbcType=BIGINT},
+      </if>
+      <if test="tbBookstoreShoppingCartBookId != null">
+        tb_bookstore_shopping_cart_book_id = #{tbBookstoreShoppingCartBookId,jdbcType=BIGINT},
+      </if>
+      <if test="tbBookstoreShoppingCartBookCount != null">
+        tb_bookstore_shopping_cart_book_count = #{tbBookstoreShoppingCartBookCount,jdbcType=INTEGER},
+      </if>
+      <if test="tbBookstoreShoppingCartCreateTime != null">
+        tb_bookstore_shopping_cart_create_time = #{tbBookstoreShoppingCartCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tbBookstoreShoppingCartUpdateTime != null">
+        tb_bookstore_shopping_cart_update_time = #{tbBookstoreShoppingCartUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="person.liufan.bookstore.entity.BookstoreShoppingCart">
+    update tb_bookstore_shopping_cart
+    set tb_bookstore_shopping_cart_user_id = #{tbBookstoreShoppingCartUserId,jdbcType=BIGINT},
+      tb_bookstore_shopping_cart_book_id = #{tbBookstoreShoppingCartBookId,jdbcType=BIGINT},
+      tb_bookstore_shopping_cart_book_count = #{tbBookstoreShoppingCartBookCount,jdbcType=INTEGER},
+      tb_bookstore_shopping_cart_create_time = #{tbBookstoreShoppingCartCreateTime,jdbcType=TIMESTAMP},
+      tb_bookstore_shopping_cart_update_time = #{tbBookstoreShoppingCartUpdateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

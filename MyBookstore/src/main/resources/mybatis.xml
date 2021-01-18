@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF8"?>
+
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <settings>
+        <setting name="logImpl" value="STDOUT_LOGGING" />
+    </settings>
+    <typeAliases>
+        <package name="person.liufan.student.entity"/>
+    </typeAliases>
+    <!--pageHelper-->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageHelper">
+            <property name="dialect" value="mysql"/>
+        </plugin>
+    </plugins>
+    <mappers>
+        <package name="per.liufan.student.mapper"/>
+    </mappers>
+</configuration>
