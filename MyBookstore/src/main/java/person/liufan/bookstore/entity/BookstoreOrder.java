@@ -13,6 +13,10 @@ public class BookstoreOrder {
      */
     private Long id;
     /**
+     * 订单所属用户的id
+     */
+    private BigDecimal tbBookstoreOrderUserId;
+    /**
      * 订单的所有金额
      */
     private BigDecimal tbBookstoreOrderTotalMoney;

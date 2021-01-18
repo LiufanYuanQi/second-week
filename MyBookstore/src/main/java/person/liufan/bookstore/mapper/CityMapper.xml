@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="person.liufan.bookstore.mapper.CityMapper">
+  <resultMap id="BaseResultMap" type="person.liufan.bookstore.entity.City">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="country" jdbcType="VARCHAR" property="country" />
+    <result column="province_id" jdbcType="BIGINT" property="provinceId" />
+    <result column="state" jdbcType="VARCHAR" property="state" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="cityASCII" jdbcType="VARCHAR" property="cityascii" />
+    <result column="resource" jdbcType="INTEGER" property="resource" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, country, province_id, state, city, cityASCII, resource, sort
+  </sql>
+  <select id="listCity" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from hai_location
+  </select>
+  <select id="listCityByProvince" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from hai_location
+    where province_id = #{provinceId}
+  </select><select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from hai_location
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from hai_location
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="person.liufan.bookstore.entity.City">
+    insert into hai_location (id, country, province_id, 
+      state, city, cityASCII, 
+      resource, sort)
+    values (#{id,jdbcType=BIGINT}, #{country,jdbcType=VARCHAR}, #{provinceId,jdbcType=BIGINT}, 
+      #{state,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{cityascii,jdbcType=VARCHAR}, 
+      #{resource,jdbcType=INTEGER}, #{sort,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="person.liufan.bookstore.entity.City">
+    insert into hai_location
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="country != null">
+        country,
+      </if>
+      <if test="provinceId != null">
+        province_id,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="cityascii != null">
+        cityASCII,
+      </if>
+      <if test="resource != null">
+        resource,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="country != null">
+        #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceId != null">
+        #{provinceId,jdbcType=BIGINT},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="cityascii != null">
+        #{cityascii,jdbcType=VARCHAR},
+      </if>
+      <if test="resource != null">
+        #{resource,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="person.liufan.bookstore.entity.City">
+    update hai_location
+    <set>
+      <if test="country != null">
+        country = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceId != null">
+        province_id = #{provinceId,jdbcType=BIGINT},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="cityascii != null">
+        cityASCII = #{cityascii,jdbcType=VARCHAR},
+      </if>
+      <if test="resource != null">
+        resource = #{resource,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="person.liufan.bookstore.entity.City">
+    update hai_location
+    set country = #{country,jdbcType=VARCHAR},
+      province_id = #{provinceId,jdbcType=BIGINT},
+      state = #{state,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      cityASCII = #{cityascii,jdbcType=VARCHAR},
+      resource = #{resource,jdbcType=INTEGER},
+      sort = #{sort,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

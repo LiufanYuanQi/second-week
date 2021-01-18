@@ -9,7 +9,7 @@
         <setting name="logImpl" value="STDOUT_LOGGING" />
     </settings>
     <typeAliases>
-        <package name="person.liufan.student.entity"/>
+        <package name="person.liufan.bookstore.entity"/>
     </typeAliases>
     <!--pageHelper-->
     <plugins>
@@ -18,6 +18,6 @@
         </plugin>
     </plugins>
     <mappers>
-        <package name="per.liufan.student.mapper"/>
+        <package name="person.liufan.bookstore.mapper"/>
     </mappers>
 </configuration>

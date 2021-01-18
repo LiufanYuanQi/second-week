@@ -3,13 +3,14 @@
 <mapper namespace="person.liufan.bookstore.mapper.BookstoreOrderMapper">
   <resultMap id="BaseResultMap" type="person.liufan.bookstore.entity.BookstoreOrder">
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="tb_bookstore_order_user_id" jdbcType="BIGINT" property="tbBookstoreOrderUserId" />
     <result column="tb_bookstore_order_total_money" jdbcType="DECIMAL" property="tbBookstoreOrderTotalMoney" />
     <result column="tb_bookstore_order_shipping_address" jdbcType="VARCHAR" property="tbBookstoreOrderShippingAddress" />
     <result column="tb_bookstore_order_create_time" jdbcType="TIMESTAMP" property="tbBookstoreOrderCreateTime" />
     <result column="tb_bookstore_order_update_time" jdbcType="TIMESTAMP" property="tbBookstoreOrderUpdateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, tb_bookstore_order_total_money, tb_bookstore_order_shipping_address, tb_bookstore_order_create_time, 
+    id,tb_bookstore_order_user_id, tb_bookstore_order_total_money, tb_bookstore_order_shipping_address, tb_bookstore_order_create_time,
     tb_bookstore_order_update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -23,10 +24,10 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="person.liufan.bookstore.entity.BookstoreOrder">
-    insert into tb_bookstore_order (id, tb_bookstore_order_total_money, tb_bookstore_order_shipping_address, 
+    insert into tb_bookstore_order (id,tb_bookstore_order_user_id, tb_bookstore_order_total_money, tb_bookstore_order_shipping_address,
       tb_bookstore_order_create_time, tb_bookstore_order_update_time
       )
-    values (#{id,jdbcType=BIGINT}, #{tbBookstoreOrderTotalMoney,jdbcType=DECIMAL}, #{tbBookstoreOrderShippingAddress,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{tbBookstoreOrderUserId,jdbcType=BIGINT},#{tbBookstoreOrderTotalMoney,jdbcType=DECIMAL}, #{tbBookstoreOrderShippingAddress,jdbcType=VARCHAR},
       #{tbBookstoreOrderCreateTime,jdbcType=TIMESTAMP}, #{tbBookstoreOrderUpdateTime,jdbcType=TIMESTAMP}
       )
   </insert>
@@ -35,6 +36,9 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="tbBookstoreOrderUserId != null">
+        tb_bookstore_order_user_id,
       </if>
       <if test="tbBookstoreOrderTotalMoney != null">
         tb_bookstore_order_total_money,
@@ -53,6 +57,9 @@
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
+      <if test="tbBookstoreOrderUserId != null">
+        #{tb_bookstore_order_user_id,jdbcType=BIGINT},
+      </if>
       <if test="tbBookstoreOrderTotalMoney != null">
         #{tbBookstoreOrderTotalMoney,jdbcType=DECIMAL},
       </if>
@@ -70,6 +77,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="person.liufan.bookstore.entity.BookstoreOrder">
     update tb_bookstore_order
     <set>
+      <if test="tbBookstoreOrderUserId != null">
+        tb_bookstore_order_user_id = #{tbBookstoreOrderUserId,jdbcType=BIGINT},
+      </if>
       <if test="tbBookstoreOrderTotalMoney != null">
         tb_bookstore_order_total_money = #{tbBookstoreOrderTotalMoney,jdbcType=DECIMAL},
       </if>
@@ -87,7 +97,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="person.liufan.bookstore.entity.BookstoreOrder">
     update tb_bookstore_order
-    set tb_bookstore_order_total_money = #{tbBookstoreOrderTotalMoney,jdbcType=DECIMAL},
+    set tb_bookstore_order_user_id = #{tbBookstoreOrderUserId,jdbcType=BIGINT},
+      tb_bookstore_order_total_money = #{tbBookstoreOrderTotalMoney,jdbcType=DECIMAL},
       tb_bookstore_order_shipping_address = #{tbBookstoreOrderShippingAddress,jdbcType=VARCHAR},
       tb_bookstore_order_create_time = #{tbBookstoreOrderCreateTime,jdbcType=TIMESTAMP},
       tb_bookstore_order_update_time = #{tbBookstoreOrderUpdateTime,jdbcType=TIMESTAMP}

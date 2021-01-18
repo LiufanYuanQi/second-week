@@ -43,4 +43,11 @@ public interface BookstoreUserMapper {
      * @return 1成功，0失败
      */
     int updateByPrimaryKey(BookstoreUser record);
+
+    /**
+     * 通过名字查询记录
+     * @param userName 用户名
+     * @return 查询结果
+     */
+    BookstoreUser selectByName(String userName);
 }

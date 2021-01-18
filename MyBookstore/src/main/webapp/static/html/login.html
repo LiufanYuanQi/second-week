@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<head>
+<meta charset="UTF-8">
+<link href="../js/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="../js/jquery/jquery-1.11.1-min.js"></script>
+<script type="text/javascript" src="../js/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+</head>
+<script>
+	if(window.top!=window){
+		window.top.location=window.location;
+	}
+	/**
+	 * 将表单结果发给后端验证，成功进行跳转，失败弹出后端返回message
+	 * 返回结果为
+	 * 	data：	flag：{}
+	 * 			message：{}
+	 * */
+	$(function () {
+		$("#user").focus();
+		$("#loginBtn").click(function () {
+			$.ajax({
+				data:{
+					userName: $("#loginAct").val(),
+					userPassword: $("#loginPwd").val()
+				},
+				type: "post",
+				url: "/login",
+				success(data) {
+					let obj = $.parseJSON(data);
+					if (obj.flag == true) {
+						window.location.href = "main/usermanagement.html";
+					}else {
+						alert(obj.message);
+					}
+				}
+			});
+		});
+	});
+</script>
+<body>
+	<div style="position: absolute; height: 100%; width: 100%; top: 0px; bottom: 0px;overflow:hidden; word-break:break-all;background: green;">
+		<img src="../image/IMG_20210113_101857.jpg" style="position: relative;width: 100%; height: 100%;">
+	</div>
+
+	<div style="position: absolute;top: 20%;left: 50%;margin-left: -150px">
+		<div style="margin: 0 auto">
+			<div class="page-header">
+				<h1>登录</h1>
+			</div>
+
+
+			<form class="form-horizontal" role="form">
+				<div class="form-group form-group-lg">
+					<div style="width: 350px;">
+						<input id="loginAct" class="form-control" type="text" placeholder="用户名">
+					</div>
+					<div style="width: 350px; position: relative;top: 20px;">
+						<input id="loginPwd" class="form-control" type="password" placeholder="密码">
+					</div>
+					<div class="checkbox"  style="position: relative;top: 30px; left: 10px;">
+							<span id="msg"></span>
+					</div>
+					<button type="button" id="loginBtn" class="btn btn-primary btn-lg btn-block"  style="width: 350px; position: relative;top: 45px;">登录</button>
+					<div style="position: relative;top: 30px;">
+						<button type="button" id="registerBtn" class="btn btn-success btn-lg btn-block"  style="width: 350px; position: relative;top: 45px;">注册</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
