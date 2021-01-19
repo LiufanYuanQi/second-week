@@ -19,6 +19,10 @@
     <servlet-name>provinceServlet</servlet-name>
     <servlet-class>person.liufan.bookstore.servlet.ProvinceServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>registerServlet</servlet-name>
+    <servlet-class>person.liufan.bookstore.servlet.RegisterServlet</servlet-class>
+  </servlet>
 
 
   <servlet-mapping>
@@ -28,5 +32,9 @@
   <servlet-mapping>
     <servlet-name>provinceServlet</servlet-name>
     <url-pattern>/provinces</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>registerServlet</servlet-name>
+    <url-pattern>/register</url-pattern>
   </servlet-mapping>
 </web-app>

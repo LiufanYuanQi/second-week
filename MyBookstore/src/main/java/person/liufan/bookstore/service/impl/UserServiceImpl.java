@@ -1,5 +1,6 @@
 package person.liufan.bookstore.service.impl;
 
+import org.springframework.stereotype.Component;
 import person.liufan.bookstore.entity.BookstoreUser;
 import person.liufan.bookstore.mapper.BookstoreUserMapper;
 import person.liufan.bookstore.service.UserService;
@@ -12,6 +13,7 @@ import java.util.Map;
  * @author liufan E-mail:fan.liu@biz-united.com.cn
  * @version 创建时间：2021/1/18
  */
+@Component
 public class UserServiceImpl implements UserService {
     @Resource
     private BookstoreUserMapper userMapper;

@@ -18,5 +18,10 @@ public interface UserService {
      */
     Map login(String userName, String password);
 
+    /**
+     * 对上传的用户进行验证，如果用户不存在则进行保存返回是否保存成功
+     * @param user
+     * @return
+     */
     Boolean sava(BookstoreUser user);
 }

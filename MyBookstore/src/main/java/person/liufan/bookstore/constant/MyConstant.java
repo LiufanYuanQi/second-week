@@ -5,6 +5,9 @@ package person.liufan.bookstore.constant;
  * @version 创建时间：2021/1/18
  */
 public class MyConstant {
+    /**
+     * type类型
+     */
     public static final String TYPE = "type";
     public static final String TYPE_SAVE = "save";
     public static final String TYPE_UPDATE = "update";
@@ -17,8 +20,31 @@ public class MyConstant {
     public static final String TYPE_UPDATE_USER_POSITION = "updateUserPosition";
     public static final String TYPE_QUERY_POSITION_BY_ID = "queryPositionById";
     public static final String TYPE_DELETE_USER_POSITION = "deleteUserPosition";
-    public static final String PARAMETER_USER_NAME = "userName";
-    public static final String PARAMETER_USER_PASSWORD = "userPassword";
+
+    /**
+     * 参数名称
+     * name
+     * password
+     * realName
+     * phone
+     * email
+     * cityId
+     * address
+     * hobbies
+     */
+    public static final String PARAMETER_NAME = "name";
+    public static final String PARAMETER_PASSWORD = "password";
+    public static final String PARAMETER_REAL_NAME = "realName";
+    public static final String PARAMETER_PHONE = "phone";
+    public static final String PARAMETER_EMAIL = "email";
+    public static final String PARAMETER_CITY_ID = "cityId";
+    public static final String PARAMETER_ADDRESS = "address";
+    public static final String PARAMETER_HOBBIES = "hobbies";
+
+
+    /**
+     * 标记名称
+     */
     public static final String LOGIN_FLAG = "flag";
     public static final String LOGIN_USER = "user";
 }

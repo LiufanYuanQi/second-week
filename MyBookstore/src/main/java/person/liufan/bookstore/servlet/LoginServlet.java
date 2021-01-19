@@ -31,8 +31,8 @@ public class LoginServlet extends HttpServlet {
         WebApplicationContext ac = (WebApplicationContext) this.getServletContext().getAttribute(attr);
         UserService userService = (UserService) ac.getBean("userService");
 
-        String userName = request.getParameter(MyConstant.PARAMETER_USER_NAME);
-        String password = request.getParameter(MyConstant.PARAMETER_USER_PASSWORD);
+        String userName = request.getParameter(MyConstant.PARAMETER_NAME);
+        String password = request.getParameter(MyConstant.PARAMETER_PASSWORD);
         Map map = userService.login(userName, password);
         if ((boolean)map.get(MyConstant.LOGIN_FLAG)) {
             HttpSession session = request.getSession();

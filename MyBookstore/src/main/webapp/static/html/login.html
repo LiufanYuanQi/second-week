@@ -20,8 +20,8 @@
 		$("#loginBtn").click(function () {
 			$.ajax({
 				data:{
-					userName: $("#loginAct").val(),
-					userPassword: $("#loginPwd").val()
+					name: $("#loginAct").val(),
+					password: $("#loginPwd").val()
 				},
 				type: "post",
 				url: "/login",
