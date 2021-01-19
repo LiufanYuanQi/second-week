@@ -22,4 +22,9 @@ public class CityServiceImpl implements CityService {
         List<City> cities = cityMapper.listCityByProvince(provinceId);
         return cities;
     }
+
+    @Override
+    public City selectCityById(Long cityId) {
+        return cityMapper.selectByPrimaryKey(cityId);
+    }
 }

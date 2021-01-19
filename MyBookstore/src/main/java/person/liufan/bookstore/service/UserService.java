@@ -1,5 +1,6 @@
 package person.liufan.bookstore.service;
 
+import com.github.pagehelper.PageInfo;
 import person.liufan.bookstore.entity.BookstoreUser;
 
 import java.util.Map;
@@ -24,4 +25,34 @@ public interface UserService {
      * @return
      */
     Boolean sava(BookstoreUser user);
+
+    /**
+     * 通过用户id获取用户详情
+     * @param userId userId
+     * @return 记录详情
+     */
+    BookstoreUser getUserDetail(Long userId);
+
+    /**
+     * 根据条件分页查询记录
+     * @param id 指定的id
+     * @param pageNum 当前页码
+     * @param pageSize 每页大小
+     * @return 查询结果
+     */
+    PageInfo<BookstoreUser> listUserDetailByName(Long id, int pageNum, int pageSize);
+
+    /**
+     * 通过id对记录进行更新
+     * @param user 记录实体
+     * @return 执行结果
+     */
+    boolean updateUser(BookstoreUser user);
+
+    /**
+     * 通过ids进行批量删除
+     * @param ids ids
+     * @return 执行结果
+     */
+    Boolean deleteUserByIds(String[] ids);
 }

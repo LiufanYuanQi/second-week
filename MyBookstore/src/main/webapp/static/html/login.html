@@ -28,13 +28,16 @@
 				success(data) {
 					let obj = $.parseJSON(data);
 					if (obj.flag == true) {
-						window.location.href = "main/usermanagement.html";
+						window.location.href = "main/user-management.html";
 					}else {
 						alert(obj.message);
 					}
 				}
 			});
 		});
+		$("#registerBtn").click(function () {
+			window.location.href = "register.html";
+		})
 	});
 </script>
 <body>

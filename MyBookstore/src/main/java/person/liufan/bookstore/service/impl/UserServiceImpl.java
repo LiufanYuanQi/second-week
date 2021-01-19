@@ -1,12 +1,16 @@
 package person.liufan.bookstore.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Component;
+import person.liufan.bookstore.entity.BookstoreOrder;
 import person.liufan.bookstore.entity.BookstoreUser;
 import person.liufan.bookstore.mapper.BookstoreUserMapper;
 import person.liufan.bookstore.service.UserService;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,6 +50,32 @@ public class UserServiceImpl implements UserService {
             return false;
         }
         Integer flag = userMapper.insertSelective(user);
+        return flag == 1;
+    }
+
+    @Override
+    public BookstoreUser getUserDetail(Long userId) {
+        return userMapper.selectByPrimaryKey(userId);
+    }
+
+    @Override
+    public PageInfo<BookstoreUser> listUserDetailByName(Long id, int pageNum, int pageSize) {
+        BookstoreUser user = new BookstoreUser();
+        user.setId(id);
+        PageHelper.startPage(pageNum, pageSize);
+        List<BookstoreUser> list = userMapper.listUserById(user);
+        PageInfo<BookstoreUser> pageInfo = new PageInfo<>(list);
+        return pageInfo;
+    }
+
+    @Override
+    public boolean updateUser(BookstoreUser user) {
+        int flag = userMapper.updateByPrimaryKeySelective(user);
+        return flag == 1;
+    }
+    @Override
+    public Boolean deleteUserByIds(String[] ids) {
+        int flag = userMapper.deleteByIds(ids);
         return flag == 1;
     }
 }

@@ -29,7 +29,7 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String attr = WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE;
         WebApplicationContext ac = (WebApplicationContext) this.getServletContext().getAttribute(attr);
-        UserService userService = (UserService) ac.getBean("userService");
+        UserService userService = (UserService) ac.getBean("userServiceImpl");
 
         String userName = request.getParameter(MyConstant.PARAMETER_NAME);
         String password = request.getParameter(MyConstant.PARAMETER_PASSWORD);

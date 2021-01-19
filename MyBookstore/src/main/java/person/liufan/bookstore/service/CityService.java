@@ -19,4 +19,12 @@ public interface CityService {
      * @return 城市集合
      */
     List<City> listCity(Long provinceId);
+
+    /**
+     * 通过cityId获取对应的记录
+     * @param cityId cityId
+     * @return 记录详情
+     */
+    City selectCityById(Long cityId);
+
 }

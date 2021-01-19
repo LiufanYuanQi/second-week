@@ -17,9 +17,6 @@ public class MyConstant {
     public static final String TYPE_CITY = "city";
     public static final String TYPE_QUERY_DETAIL = "queryDetail";
     public static final String TYPE_QUERY_BY_ID = "queryById";
-    public static final String TYPE_UPDATE_USER_POSITION = "updateUserPosition";
-    public static final String TYPE_QUERY_POSITION_BY_ID = "queryPositionById";
-    public static final String TYPE_DELETE_USER_POSITION = "deleteUserPosition";
 
     /**
      * 参数名称
@@ -32,6 +29,7 @@ public class MyConstant {
      * address
      * hobbies
      */
+    public static final String PARAMETER_ID = "id";
     public static final String PARAMETER_NAME = "name";
     public static final String PARAMETER_PASSWORD = "password";
     public static final String PARAMETER_REAL_NAME = "realName";
