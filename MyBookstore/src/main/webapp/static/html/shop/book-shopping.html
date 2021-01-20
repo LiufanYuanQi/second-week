@@ -36,14 +36,62 @@
 		 * address
 		 * hobbies
 		 */
-		$("#addBook").click(function () {
-			$("#add-name").val("");
-			$("#add-author").val("");
-			$("#add-publishing").val("");
-			$("#add-price").val("");
-			$("#add-number").val("");
-			$("#add-info").val("");
-			$("#addBookModal").modal("show");
+		$("#addToShoppingCart").click(function () {
+			if ($("input[name=check]:checked").length == 0) {
+				alert("请选择要修改的数据");
+			} else if ($("input[name=check]:checked").length != 1) {
+				var addList = "";
+				if ($("input[name=check]:checked").length == 0) {
+					alert("请选择删除的数据");
+					return;
+				} else {
+					for (var i = 0; i < $("input[name=check]:checked").length; i++) {
+						addList += $("input[name=check]:checked")[i].value
+						if (i < $("input[name=check]:checked").length - 1) {
+							addList += "&";
+						}
+					}
+				}
+				$.ajax({
+					data: {
+						type: "addToShoppingCart",
+						addList: addList
+					},
+					url: "/shoppingCart",
+					type: "post",
+					success() {
+						getForm();
+						$("#selectAll").prop("checked", false);
+					}
+				});
+			} else {
+				/*
+				* 通过id获取这条记录的详细信息，并将结果填充到
+				* */
+				$.ajax({
+					data: {
+						type: "queryById",
+						id: $("input[name=check]:checked").val()
+					},
+					url: "/bookManagement",
+					type: "post",
+					/*
+					* 返回这条记录的详细信息
+					* data：user：user
+					* */
+					success(data) {
+						let obj = $.parseJSON(data);
+						$("#add-name").val(obj.tbBookstoreBookName);
+						$("#add-author").val(obj.tbBookstoreBookAuthor);
+						$("#add-publishing").val(obj.tbBookstoreBookPublishing);
+						$("#add-price").val(obj.tbBookstoreBookPrice);
+						$("#add-number").val(obj.tbBookstoreBookNumber);
+						$("#add-info").val(obj.tbBookstoreBookInfo);
+					}
+				})
+				$("#addBookModal").modal("show");
+			}
+
 
 		});
 		/**
@@ -56,26 +104,22 @@
 		 * info
 		 */
 		$("#add-submitBtn").click(function () {
-			if (addFormCheck()) {
+			if (true) {
 				$.ajax({
-					url: "/bookManagement",
+					url: "/shoppingCart",
 					type: "post",
 					data: {
 						type: "save",
-						name: $("#add-name").val(),
-						author: $("#add-author").val(),
-						publishing: $("#add-publishing").val(),
-						price: $("#add-price").val(),
-						number: $("#add-number").val(),
-						info: $("#add-info").val()
+						bookId: $("input[name=check]:checked").val(),
+						bookCount: $("#add-bookCount").val()
 					},
 					success(data) {
 						if ($.parseJSON(data)) {
-							alert("账号添加成功");
-							$("#addUserModal").modal("hide");
+							alert("添加到购物车成功");
 						} else {
-							alert("账号已经存在");
+							alert("商品已经在购物车中了");
 						}
+						$("#addUserModal").modal("hide");
 					}
 				});
 			} else {
@@ -150,111 +194,6 @@
 			return true;
 		}
 
-		/**
-		 * 当点击修改用户按钮时将获取用户信息进行回响，填充表单，然后弹出修改模态框
-		 * 提交参数
-		 * name
-		 * password
-		 * realName
-		 * phone
-		 * email
-		 * cityId
-		 * address
-		 * hobbies
-		 */
-		$("#editBook").click(function () {
-			if ($("input[name=check]:checked").length == 0) {
-				alert("请选择要修改的数据");
-			} else if ($("input[name=check]:checked").length != 1) {
-				alert("只能修改单条数据");
-			} else {
-				/*
-				* 通过id获取这条记录的详细信息，并将结果填充到
-				* */
-				$.ajax({
-					data: {
-						type: "queryById",
-						id: $("input[name=check]:checked").val()
-					},
-					url: "/bookManagement",
-					type: "post",
-					/*
-					* 返回这条记录的详细信息
-					* data：user：user
-					* */
-					success(data) {
-						let obj = $.parseJSON(data);
-						$("#edit-name").val(obj.tbBookstoreBookName);
-						$("#edit-author").val(obj.tbBookstoreBookAuthor);
-						$("#edit-publishing").val(obj.tbBookstoreBookPublishing);
-						$("#edit-price").val(obj.tbBookstoreBookPrice);
-						$("#edit-number").val(obj.tbBookstoreBookNumber);
-						$("#edit-info").val(obj.tbBookstoreBookInfo);
-					}
-				})
-			}
-			$("#editUserModal").modal("show");
-
-		});
-		/**
-		 * 信息填写完毕，点击提交进行表单验证，验证成功提交数据
-		 */
-		$("#edit-submitBtn").click(function () {
-			if (true) {
-				$.ajax({
-					url: "/bookManagement",
-					type: "post",
-					data: {
-						type: "update",
-						id: $("input[name=check]:checked").val(),
-						name: $("#edit-name").val(),
-						author: $("#edit-author").val(),
-						publishing: $("#edit-publishing").val(),
-						price: $("#edit-price").val(),
-						number: $("#edit-number").val(),
-						info: $("#edit-info").val()
-					},
-					success(data) {
-						if ($.parseJSON(data)) {
-							alert("账号修改成功");
-						} else {
-							alert("账号修改失败");
-						}
-						$("#editUserModal").modal("hide");
-						getFromByPage();
-					}
-				});
-			} else {
-				alert("请重新修改信息");
-			}
-		});
-
-		$("#deleteBook").click(function () {
-			var deleteList = "";
-			if ($("input[name=check]:checked").length == 0) {
-				alert("请选择删除的数据");
-				return;
-			} else {
-				for (var i = 0; i < $("input[name=check]:checked").length; i++) {
-					deleteList += $("input[name=check]:checked")[i].value
-					if (i < $("input[name=check]:checked").length - 1) {
-						deleteList += "&";
-					}
-				}
-			}
-			$.ajax({
-				data: {
-					type: "delete",
-					deleteList: deleteList
-				},
-				url: "/bookManagement",
-				type: "post",
-				success() {
-					getForm();
-					$("#selectAll").prop("checked", false);
-				}
-			});
-		});
 
 		/**
 		 * 全选
@@ -289,71 +228,6 @@
 			$("#currentPage").val(1);
 			getFromByPage();
 		})
-		/**
-		 * 添加表单验证方法，验证成功返回true
-		 * */
-		/*function editFormCheck() {
-			let flag = true;
-			if (($("#edit-name").val()) == null) {
-				alert("用户名不能为空");
-				flag = false;
-			}
-			let isNameTrue = /^[a-zA-Z0-9]{1,}$/;
-			if (!isNameTrue.test($("#edit-name").val())) {
-				alert("用户名只能由字母和数字组成");
-				flag = false;
-			}
-
-			if (($("#edit-password").val()) == null) {
-				alert("密码不能为空");
-				flag = false;
-			}
-			let isPasswordTrue = /^(?=.*?[A-Za-z])(?=.*?[0-9]).{8,}$/;
-			if (!isPasswordTrue.test($("#edit-password").val())) {
-				alert("密码大于8位，且必须包含大小写字母和数字");
-				flag = false;
-			}
-			if (($("#edit-realName").val()) == null || ($("#edit-realName").val()) == "") {
-				alert("真实姓名不能为空");
-				flag = false;
-			}
-			let isRealNameTrue = /^[\u4e00-\u9fa5]{0,}$/;
-			if (!isRealNameTrue.test($("#edit-realName").val())) {
-				alert("请输入真实姓名");
-				flag = false;
-			}
-
-			if (($("#edit-phone").val()) == null) {
-				alert("手机号不能为空")
-				flag = false;
-			}
-			let isPhoneTrue = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/;
-			if (!isPhoneTrue.test($("#edit-phone").val())) {
-				alert("请输入有效的手机号");
-				flag = false;
-			}
-
-			if (($("#edit-email").val()) == null) {
-				alert("邮箱不能为空")
-				flag = false;
-			}
-			let isEmailTrue = /^([A-Za-z0-9_\-\.\u4e00-\u9fa5])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,8})/;
-			if (!isEmailTrue.test($("#edit-email").val())) {
-				alert("邮箱格式错误");
-				flag = false;
-			}
-
-			if ($("#edit-address").val() == null) {
-				alert("请输入地址");
-				flag = false;
-			}
-
-			if ($("input[name='edit-hobby']:checked").length < 2) {
-				alert("兴趣爱好至少两个");
-				flag = false;
-			}
-			return flag;
-		}*/
 
 		function setHidden() {
 			$("#bookId").val($("#selectBookId").val())
@@ -439,7 +313,7 @@
 </head>
 <body>
 
-	<!-- 创建市场活动的模态窗口 -->
+	<!-- 添加到购物车的模态窗口 -->
 	<div class="modal fade" id="addBookModal" role="dialog">
 		<div class="modal-dialog" role="document" style="width: 50%;">
 			<div class="modal-content">
@@ -450,40 +324,45 @@
 					<h4 class="modal-title" id="myModalLabel1">添加图书</h4>
 				</div>
 				<div class="modal-body">
-					<div style="height: 400px">
+					<div style="height: 450px">
 						<div style="position: relative;top: 5%;left: 50%;margin-left: -150px">
 							<form class="form-horizontal" role="form" onsubmit="return false">
 								<div class="form-group">
 									<!--名称输入框-->
 									<div class="input-group" style="width: 350px">
 										<span class="input-group-addon" style="width: 50px">名称 </span>
-										<input type="text" id="add-name" class="form-control" placeholder="Name" aria-describedby="sizing-addon2" name="username">
+										<input type="text" readonly="readonly" id="add-name" class="form-control" placeholder="Name" aria-describedby="sizing-addon2" name="username">
 									</div>
 
 									<!--作者输入框-->
 									<div class="input-group" style="width: 350px;position: relative;top: 10px">
 										<span class="input-group-addon"style="width: 50px"> 作者 </span>
-										<input type="text" id="add-author" class="form-control" placeholder="Author" aria-describedby="sizing-addon2" name="password">
+										<input type="text" readonly="readonly" id="add-author" class="form-control" placeholder="Author" aria-describedby="sizing-addon2" name="password">
 									</div>
 									<!--出版社输入框-->
 									<div class="input-group" style="width: 350px;position: relative;top: 20px">
 										<span class="input-group-addon" style="width: 50px"> 出版社</span>
-										<input type="text" id="add-publishing" class="form-control" placeholder="Publishing" aria-describedby="sizing-addon2" name="username">
+										<input type="text" readonly="readonly" id="add-publishing" class="form-control" placeholder="Publishing" aria-describedby="sizing-addon2" name="username">
 									</div>
 									<!--图书价格输入框-->
 									<div class="input-group" style="width: 350px;position: relative;top: 30px">
 										<span class="input-group-addon" style="width: 50px">价格</span>
-										<input type="text" id="add-price" class="form-control" placeholder="Price" aria-describedby="sizing-addon2" name="username">
+										<input type="text" readonly="readonly" id="add-price" class="form-control" placeholder="Price" aria-describedby="sizing-addon2" name="username">
 									</div>
 									<!--数量输入框-->
 									<div class="input-group" style="width: 350px; position: relative; top: 40px">
-										<span class="input-group-addon"style="width: 50px">数量</span>
-										<input type="text" id="add-number" class="form-control" placeholder="Number" aria-describedby="sizing-addon2" name="email">
+										<span class="input-group-addon"style="width: 50px">库存</span>
+										<input type="text" readonly="readonly" id="add-number" class="form-control" placeholder="Number" aria-describedby="sizing-addon2" name="email">
 									</div>
 									<!--详情输入框-->
 									<div class="input-group" style="width: 350px; position: relative; top: 50px">
 										<span class="input-group-addon" style="width: 50px">详情</span>
-										<input type="text" id="add-info" class="form-control" placeholder="Info" aria-describedby="sizing-addon2">
+										<input type="text" readonly="readonly" id="add-info" class="form-control" placeholder="Info" aria-describedby="sizing-addon2">
+									</div>
+									<!--购买数量输入框-->
+									<div class="input-group" style="width: 350px; position: relative; top: 60px">
+										<span class="input-group-addon" style="width: 50px">购买数量</span>
+										<input type="text" id="add-bookCount" class="form-control" placeholder="BookCount" aria-describedby="sizing-addon2">
 									</div>
 								</div>
 								<div class="form-group">
@@ -500,74 +379,17 @@
 		</div>
 	</div>
 
-	<!-- 修改市场活动的模态窗口 -->
-	<div class="modal fade" id="editUserModal" role="dialog">
-		<div class="modal-dialog" role="document" style="width: 50%;">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">
-						<span aria-hidden="true">×</span>
-					</button>
-					<h4 class="modal-title" id="myModalLabel2">创建用户</h4>
-				</div>
-				<div class="modal-body">
-					<div style="height: 500px">
-						<div style="position: relative;top: 5%;left: 50%;margin-left: -150px">
-							<form action="/register" class="form-horizontal" role="form" onsubmit="return false">
-								<div class="form-group">
-									<!--名称输入框-->
-									<div class="input-group" style="width: 350px">
-										<input type="hidden" id="edit-id">
-										<span class="input-group-addon" style="width: 50px">名称 </span>
-										<input type="text" id="edit-name" class="form-control" placeholder="Name" aria-describedby="sizing-addon2" name="username">
-									</div>
-									<!--作者输入框-->
-									<div class="input-group" style="width: 350px;position: relative;top: 10px">
-										<span class="input-group-addon"style="width: 50px"> 作者 </span>
-										<input type="text" id="edit-author" class="form-control" placeholder="Author" aria-describedby="sizing-addon2" name="password">
-									</div>
-									<!--出版社输入框-->
-									<div class="input-group" style="width: 350px;position: relative;top: 20px">
-										<span class="input-group-addon" style="width: 50px"> 出版社</span>
-										<input type="text" id="edit-publishing" class="form-control" placeholder="Publishing" aria-describedby="sizing-addon2" name="username">
-									</div>
-									<!--图书价格输入框-->
-									<div class="input-group" style="width: 350px;position: relative;top: 30px">
-										<span class="input-group-addon" style="width: 50px">价格</span>
-										<input type="text" id="edit-price" class="form-control" placeholder="Price" aria-describedby="sizing-addon2" name="username">
-									</div>
-									<!--数量输入框-->
-									<div class="input-group" style="width: 350px; position: relative; top: 40px">
-										<span class="input-group-addon"style="width: 50px">数量</span>
-										<input type="text" id="edit-number" class="form-control" placeholder="Number" aria-describedby="sizing-addon2" name="email">
-									</div>
-									<!--详情输入框-->
-									<div class="input-group" style="width: 350px;height: 50px; position: relative; top: 50px">
-										<span class="input-group-addon" style="width: 50px">详情</span>
-										<input type="text" id="edit-info" class="form-control" placeholder="Info" aria-describedby="sizing-addon2" style="height: 50px">
-									</div>
-								</div>
-								<div class="form-group">
-									<button type="button" id="edit-submitBtn" class="btn btn-primary btn-lg btn-block"  style="width: 350px; position: relative;top: 55px;">提交</button>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
 	<ul class="nav nav-tabs" >
-		<li role="presentation" id="userManagement"><a href="#">用户管理</a></li>
-		<li role="presentation" class="active" id="bookManagement"><a href="#">图书管理</a></li>
+		<li role="presentation" class="active" id="shoppingIndex"><a href="#">首页</a></li>
+		<li role="presentation" id="bookShoppingCart"><a href="#">我的购物车</a></li>
+		<li role="presentation" id="bookOrder"><a href="#">我的订单</a></li>
 		<li role="presentation" id="exit"><a href="#">退出</a></li>
 	</ul>
 	
 	<div>
 		<div style="position: relative; left: 10px; top: -10px;">
 			<div class="page-header">
-				<h3>图书列表</h3>
+				<h3>网上书城</h3>
 			</div>
 		</div>
 	</div>
@@ -588,9 +410,7 @@
 			</div>
 			<div class="btn-toolbar" role="toolbar" style="background-color: #F7F7F7; height: 50px; position: relative;top: 5px;">
 				<div class="btn-group" style="position: relative; top: 18%;">
-				  <button type="button" id="addBook" class="btn btn-primary" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span> 创建</button>
-				  <button type="button" id="editBook" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
-				  <button type="button" id="deleteBook" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+				  <button type="button" id="addToShoppingCart" class="btn btn-primary" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span> 添加到购物车</button>
 				</div>
 				
 			</div>
@@ -609,7 +429,7 @@
                             <td>单价</td>
                             <td>数量</td>
                             <td>简介</td>
-							<td>添加时间</td>
+							<td>操作</td>
 						</tr>
 					</thead>
 					<tbody id="detailTbl">
