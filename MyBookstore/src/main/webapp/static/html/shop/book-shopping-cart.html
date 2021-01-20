@@ -122,11 +122,13 @@
 				}
 			});
 		});
-
+		/**
+		 * 生成订单按钮
+		 */
 		$("#generateOrder").click(function () {
 			var shoppingCartList = "";
 			if ($("input[name=check]:checked").length == 0) {
-				alert("请选择删除的数据");
+				alert("请选择要生成订单的商品");
 				return;
 			} else {
 				for (var i = 0; i < $("input[name=check]:checked").length; i++) {
@@ -146,12 +148,60 @@
 				/**
 				 * 交给后端进行验证，验证成功返回记录，填充订单页面，验证失败返回哪个库存不够
 				 * */
-				success() {
-					getForm();
-					$("#selectAll").prop("checked", false);
+				success(data) {
+					var obj = $.parseJSON(data);
+					$.each(obj.message, function (i, v) {
+						alert(v+"的库存不足，已经取消将其加入订单，请修改购买数量后再进行操作");
+					});
+					$("#orderDetailTbl").empty();
+					var totalMoney = 0;
+					$.each(obj.cartList, function (i, n) {
+						$("#orderDetailTbl").append("<tr class=\"active\">\n" +
+								"<input name='cartId' value='" + n.id + "' type=\"hidden\" />\n" +
+								"<td>" + n.tbBookstoreBookName + "</td>\n" +
+								"<td>" + n.tbBookstoreBookPrice + "</td>\n" +
+								"<td>" + n.tbBookstoreShoppingCartBookCount + "</td>\n" +
+								"<td>" + n.tbBookstoreShoppingCartBookCount*n.tbBookstoreBookPrice + "</td>\n" +
+								"</tr>");
+						totalMoney += n.tbBookstoreShoppingCartBookCount * n.tbBookstoreBookPrice;
+					});
+					$("#order-totalMoney").val(totalMoney);
+					$("#generateOrderModal").modal("show");
 				}
 			});
 		})
+
+		$("#order-submitBtn").click(function () {
+			var orderCartList = "";
+			for (var i = 0; i < $("#orderDetailTbl input[name=cartId]").length; i++) {
+				orderCartList += $("#orderDetailTbl input[name=cartId]")[i].value
+				if (i < $("#orderDetailTbl input[name=cartId]").length - 1) {
+					orderCartList += "&";
+				}
+			}
+			if (true) {
+				$.ajax({
+					url: "/order",
+					type: "post",
+					data: {
+						type: "sava",
+						orderCartList: orderCartList,
+						orderTotalMoney: $("#order-totalMoney").val(),
+						orderAddress: $("#order-address").val()
+					},
+					success(data) {
+						if ($.parseJSON(data)) {
+							alert("添加到购物车成功");
+						} else {
+							alert("商品已经在购物车中了");
+						}
+						$("#addUserModal").modal("hide");
+					}
+				});
+			} else {
+				alert("请重新修改信息");
+			}
+		});
 
 
 
@@ -189,6 +239,34 @@
 			getFromByPage();
 		})
 
+		/**
+		 * 导航按钮
+		 * */
+		$("#shoppingIndex").click(function () {
+			window.location.href = "book-shopping.html";
+		})
+		$("#returnIndex").click(function () {
+			window.location.href = "book-shopping.html";
+		});
+		$("#bookShoppingCart").click(function () {
+			window.location.href = "book-shopping-cart.html";
+		})
+		$("#bookOrder")
+
+		$("#exit").click(function () {
+			$.ajax({
+				data: {
+					type: "exit"
+				},
+				url: "/userManagement",
+				type: "post",
+				success(data) {
+					if ($.parseJSON(data)){
+						window.location.href = "../login.html";
+					}
+				}
+			});
+		})
 		function setHidden() {
 			$("#shoppingCartId").val($("#selectShoppingCartId").val())
 		}
@@ -338,7 +416,7 @@
 		</div>
 	</div>
 	<div class="modal fade" id="generateOrderModal" role="dialog">
-		<div class="modal-dialog" role="document" style="width: 50%;">
+		<div class="modal-dialog" role="document" style="width: 80%;">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">
@@ -346,14 +424,38 @@
 					</button>
 					<h4 class="modal-title" id="myModalLabel2">购物订单</h4>
 				</div>
+				<div style="position: relative;top: 10px;">
+					<table class="table table-hover">
+						<thead>
+						<tr style="color: #B3B3B3;">
+							<td>名称</td>
+							<td>单价</td>
+							<td>购买数量</td>
+							<td>金额</td>
+						</tr>
+						</thead>
+						<tbody id="orderDetailTbl">
+						</tbody>
+					</table>
+				</div>
 				<div class="modal-body">
-					<div style="height: 450px">
+					<div style="height: auto">
 						<div style="position: relative;top: 5%;left: 50%;margin-left: -150px">
 							<form class="form-horizontal" role="form" onsubmit="return false">
 								<!--使用表格填充-->
+
 								<!--输入地址-->
+								<!--图书价格输入框-->
+								<div class="form-group input-group" style="width: 350px;position: relative;top: 20px">
+									<span class="input-group-addon" style="width: 50px">总价</span>
+									<input type="text" readonly="readonly" id="order-totalMoney" class="form-control" placeholder="Price" aria-describedby="sizing-addon2" name="username">
+								</div>
+								<div class="form-group input-group" style="width: 350px;position: relative;top: 20px">
+									<span class="input-group-addon" style="width: 50px">收货地址</span>
+									<input type="text" id="order-address" class="form-control" placeholder="Address" aria-describedby="sizing-addon2" name="username">
+								</div>
 								<div class="form-group">
-									<button type="button" id="order-submitBtn" class="btn btn-primary btn-lg btn-block"  style="width: 350px; position: relative;top: 55px;">提交</button>
+									<button type="button" id="order-submitBtn" class="btn btn-primary btn-lg btn-block"  style="width: 350px; position: relative;top: 20px;">提交</button>
 								</div>
 							</form>
 						</div>
@@ -367,8 +469,8 @@
 	</div>
 
 	<ul class="nav nav-tabs" >
-		<li role="presentation" class="active" id="shoppingIndex"><a href="#">首页</a></li>
-		<li role="presentation" id="bookShoppingCart"><a href="#">我的购物车</a></li>
+		<li role="presentation" id="shoppingIndex"><a href="#">首页</a></li>
+		<li role="presentation" class="active" id="bookShoppingCart"><a href="#">我的购物车</a></li>
 		<li role="presentation" id="bookOrder"><a href="#">我的订单</a></li>
 		<li role="presentation" id="exit"><a href="#">退出</a></li>
 	</ul>

@@ -392,6 +392,27 @@
 			$("#currentPage").val(1);
 			getFromByPage();
 		})
+		$("#userManagement").click(function () {
+			window.location.href = "user-management.html";
+		});
+		$("#bookManagement").click(function () {
+			window.location.href = "book-management.html";
+		})
+
+		$("#exit").click(function () {
+			$.ajax({
+				data: {
+					type: "exit"
+				},
+				url: "/userManagement",
+				type: "post",
+				success(data) {
+					if ($.parseJSON(data)){
+						window.location.href = "../login.html";
+					}
+				}
+			});
+		})
 		/**
 		 * 添加表单验证方法，验证成功返回true
 		 * */
@@ -731,9 +752,9 @@
 	</div>
 
 	<ul class="nav nav-tabs" >
-		<li role="presentation" class="active"><a href="#">用户管理</a></li>
-		<li role="presentation"><a href="#">图书管理</a></li>
-		<li role="presentation"><a href="#">退出</a></li>
+		<li role="presentation" class="active" id="userManagement"><a href="#">用户管理</a></li>
+		<li role="presentation" id="bookManagement"><a href="#">图书管理</a></li>
+		<li role="presentation" id="exit"><a href="#">退出</a></li>
 	</ul>
 	
 	<div>

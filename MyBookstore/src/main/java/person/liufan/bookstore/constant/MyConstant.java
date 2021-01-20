@@ -13,6 +13,7 @@ public class MyConstant {
     public static final String TYPE_UPDATE = "update";
     public static final String TYPE_DELETE = "delete";
     public static final String TYPE_LOGIN = "login";
+    public static final String TYPE_EXIT = "exit";
     public static final String TYPE_PROVINCE = "province";
     public static final String TYPE_CITY = "city";
     public static final String TYPE_QUERY_DETAIL = "queryDetail";

@@ -83,6 +83,10 @@ public class UserManagementServlet extends HttpServlet {
             Boolean flag = userService.deleteUserByIds(ids);
             MyPrintOut.printJson(response, flag);
         }
+        if (MyConstant.TYPE_EXIT.equals(type)) {
+            request.getSession().removeAttribute("user");
+            MyPrintOut.printJson(response,true);
+        }
     }
 
     private BookstoreUser toUser(HttpServletRequest request) {

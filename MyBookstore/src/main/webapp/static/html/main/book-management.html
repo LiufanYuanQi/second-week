@@ -355,6 +355,27 @@
 			return flag;
 		}*/
 
+		$("#userManagement").click(function () {
+			window.location.href = "user-management.html";
+		});
+		$("#bookManagement").click(function () {
+			window.location.href = "book-management.html";
+		})
+		$("#exit").click(function () {
+			$.ajax({
+				data: {
+					type: "exit"
+				},
+				url: "/userManagement",
+				type: "post",
+				success(data) {
+					if ($.parseJSON(data)){
+						window.location.href = "../login.html";
+					}
+				}
+			});
+		})
+
 		function setHidden() {
 			$("#bookId").val($("#selectBookId").val())
 		}

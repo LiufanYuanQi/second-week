@@ -108,6 +108,9 @@ public class ShoppingCartServlet extends HttpServlet {
             String param = request.getParameter("shoppingCartList");
             String[] ids = param.split("&");
             Map map = shoppingCartService.createOrderByIds(ids);
+            List<BookstoreShoppingCart> list = (List) map.get("cartList");
+            List<CartVO> voList = toVOList(list, bookService);
+            map.put("cartList", voList);
             MyPrintOut.printJson(response,map);
         }
         if (MyConstant.TYPE_QUERY_DETAIL.equals(type)) {
@@ -122,16 +125,7 @@ public class ShoppingCartServlet extends HttpServlet {
             Map map = new HashMap(8);
             List<BookstoreShoppingCart> list = pageInfo.getList();
             Long count = pageInfo.getTotal();
-            List<CartVO> voList = new ArrayList<>(Math.toIntExact(count));
-            for (BookstoreShoppingCart cart : list) {
-                CartVO vo = new CartVO();
-                BookstoreBook book = bookService.selectById(cart.getTbBookstoreShoppingCartBookId());
-                vo.setId(cart.getId());
-                vo.setTbBookstoreBookName(book.getTbBookstoreBookName());
-                vo.setTbBookstoreBookPrice(book.getTbBookstoreBookPrice());
-                vo.setTbBookstoreShoppingCartBookCount(cart.getTbBookstoreShoppingCartBookCount());
-                voList.add(vo);
-            }
+            List<CartVO> voList = toVOList(list, bookService);
             map.put("count", count);
             map.put("data", voList);
             MyPrintOut.printJson(response, map);
@@ -144,5 +138,19 @@ public class ShoppingCartServlet extends HttpServlet {
         cart.setTbBookstoreShoppingCartBookId(Long.valueOf(request.getParameter("bookId")));
         cart.setTbBookstoreShoppingCartBookCount(Integer.valueOf(request.getParameter("bookCount")));
         return cart;
+    }
+
+    private List<CartVO> toVOList(List<BookstoreShoppingCart> list, BookService bookService) {
+        List<CartVO> voList = new ArrayList<>(list.size());
+        for (BookstoreShoppingCart cart : list) {
+            CartVO vo = new CartVO();
+            BookstoreBook book = bookService.selectById(cart.getTbBookstoreShoppingCartBookId());
+            vo.setId(cart.getId());
+            vo.setTbBookstoreBookName(book.getTbBookstoreBookName());
+            vo.setTbBookstoreBookPrice(book.getTbBookstoreBookPrice());
+            vo.setTbBookstoreShoppingCartBookCount(cart.getTbBookstoreShoppingCartBookCount());
+            voList.add(vo);
+        }
+        return voList;
     }
 }

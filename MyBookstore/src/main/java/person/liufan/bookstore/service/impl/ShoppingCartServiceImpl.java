@@ -10,10 +10,7 @@ import person.liufan.bookstore.mapper.BookstoreShoppingCartMapper;
 import person.liufan.bookstore.service.ShoppingCartService;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author liufan E-mail:fan.liu@biz-united.com.cn
@@ -35,6 +32,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             query.setTbBookstoreShoppingCartUserId(userId);
             query.setTbBookstoreShoppingCartBookId(Long.valueOf(ids[i]));
             query.setTbBookstoreShoppingCartBookCount(1);
+            query.setTbBookstoreShoppingCartCreateTime(new Date());
             BookstoreShoppingCart cart = cartMapper.selectByUserIdAndBookId(query);
             if (cart == null) {
                 cartMapper.insertSelective(query);

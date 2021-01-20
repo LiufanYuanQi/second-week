@@ -161,6 +161,28 @@
 			$("#currentPageSize").val(data.target.value);
 			$("#currentPage").val(1);
 			getFromByPage();
+		});
+
+		$("#shoppingIndex").click(function () {
+			window.location.href = "book-shopping.html";
+		});
+		$("#bookShoppingCart").click(function () {
+			window.location.href = "book-shopping-cart.html";
+		})
+		$("#bookOrder")
+		$("#exit").click(function () {
+			$.ajax({
+				data: {
+					type: "exit"
+				},
+				url: "/userManagement",
+				type: "post",
+				success(data) {
+					if ($.parseJSON(data)){
+						window.location.href = "../login.html";
+					}
+				}
+			});
 		})
 
 		function setHidden() {
