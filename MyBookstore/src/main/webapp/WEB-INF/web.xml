@@ -31,6 +31,10 @@
     <servlet-name>bookManagement</servlet-name>
     <servlet-class>person.liufan.bookstore.servlet.BookManagementServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>shoppingCartServlet</servlet-name>
+    <servlet-class>person.liufan.bookstore.servlet.ShoppingCartServlet</servlet-class>
+  </servlet>
 
 
   <servlet-mapping>
@@ -52,5 +56,9 @@
   <servlet-mapping>
     <servlet-name>bookManagement</servlet-name>
     <url-pattern>/bookManagement</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>shoppingCartServlet</servlet-name>
+    <url-pattern>/shoppingCart</url-pattern>
   </servlet-mapping>
 </web-app>

@@ -83,6 +83,7 @@ public class BookManagementServlet extends HttpServlet {
                 BookDetaillVO vo = new BookDetaillVO();
                 vo.setId(book.getId());
                 vo.setTbBookstoreBookName(book.getTbBookstoreBookName());
+                vo.setTbBookstoreBookAuthor(book.getTbBookstoreBookAuthor());
                 vo.setTbBookstoreBookPublishing(book.getTbBookstoreBookPublishing());
                 vo.setTbBookstoreBookPrice(book.getTbBookstoreBookPrice());
                 vo.setTbBookstoreBookNumber(book.getTbBookstoreBookNumber());
@@ -130,6 +131,7 @@ public class BookManagementServlet extends HttpServlet {
         String price =request.getParameter(MyConstant.PARAMETER_PRICE);
         String number =request.getParameter(MyConstant.PARAMETER_NUMBER);
         String info =request.getParameter(MyConstant.PARAMETER_INFO);
+
         BigDecimal bigDecimalPrice = new BigDecimal(price);
         BookstoreBook book = new BookstoreBook();
         book.setTbBookstoreBookName(name);
