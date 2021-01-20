@@ -15,7 +15,7 @@ public class BookstoreOrder {
     /**
      * 订单所属用户的id
      */
-    private BigDecimal tbBookstoreOrderUserId;
+    private Long tbBookstoreOrderUserId;
     /**
      * 订单的所有金额
      */
@@ -39,6 +39,14 @@ public class BookstoreOrder {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getTbBookstoreOrderUserId() {
+        return tbBookstoreOrderUserId;
+    }
+
+    public void setTbBookstoreOrderUserId(Long tbBookstoreOrderUserId) {
+        this.tbBookstoreOrderUserId = tbBookstoreOrderUserId;
     }
 
     public BigDecimal getTbBookstoreOrderTotalMoney() {

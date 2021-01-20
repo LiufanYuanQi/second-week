@@ -12,6 +12,10 @@ public class BookstoreOrderShoppingCart {
      */
     private Long id;
     /**
+     * 关联的订单id
+     */
+    private Long tbBookstoreOrderTbscOrderId;
+    /**
      * 该订单中存在的图书id
      */
     private Long tbBookstoreOrderTbscBookId;
@@ -66,5 +70,13 @@ public class BookstoreOrderShoppingCart {
 
     public void setTbBookstoreOrderTbscUpdateTime(Date tbBookstoreOrderTbscUpdateTime) {
         this.tbBookstoreOrderTbscUpdateTime = tbBookstoreOrderTbscUpdateTime;
+    }
+
+    public Long getTbBookstoreOrderTbscOrderId() {
+        return tbBookstoreOrderTbscOrderId;
+    }
+
+    public void setTbBookstoreOrderTbscOrderId(Long tbBookstoreOrderTbscOrderId) {
+        this.tbBookstoreOrderTbscOrderId = tbBookstoreOrderTbscOrderId;
     }
 }

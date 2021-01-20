@@ -35,6 +35,10 @@
     <servlet-name>shoppingCartServlet</servlet-name>
     <servlet-class>person.liufan.bookstore.servlet.ShoppingCartServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>orderServlet</servlet-name>
+    <servlet-class>person.liufan.bookstore.servlet.OrderServlet</servlet-class>
+  </servlet>
 
 
   <servlet-mapping>
@@ -60,5 +64,9 @@
   <servlet-mapping>
     <servlet-name>shoppingCartServlet</servlet-name>
     <url-pattern>/shoppingCart</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>orderServlet</servlet-name>
+    <url-pattern>/order</url-pattern>
   </servlet-mapping>
 </web-app>

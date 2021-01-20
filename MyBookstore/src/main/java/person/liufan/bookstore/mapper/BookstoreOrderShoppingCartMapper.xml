@@ -3,13 +3,14 @@
 <mapper namespace="person.liufan.bookstore.mapper.BookstoreOrderShoppingCartMapper">
   <resultMap id="BaseResultMap" type="person.liufan.bookstore.entity.BookstoreOrderShoppingCart">
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="tb_bookstore_order_tbsc_order_id" jdbcType="BIGINT" property="tbBookstoreOrderTbscOrderId" />
     <result column="tb_bookstore_order_tbsc_book_id" jdbcType="BIGINT" property="tbBookstoreOrderTbscBookId" />
     <result column="tb_bookstore_order_tbsc_book_count" jdbcType="INTEGER" property="tbBookstoreOrderTbscBookCount" />
     <result column="tb_bookstore_order_tbsc_create_time" jdbcType="TIMESTAMP" property="tbBookstoreOrderTbscCreateTime" />
     <result column="tb_bookstore_order_tbsc_update_time" jdbcType="TIMESTAMP" property="tbBookstoreOrderTbscUpdateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, tb_bookstore_order_tbsc_book_id, tb_bookstore_order_tbsc_book_count, tb_bookstore_order_tbsc_create_time, 
+    id, tb_bookstore_order_tbsc_order_id,tb_bookstore_order_tbsc_book_id, tb_bookstore_order_tbsc_book_count, tb_bookstore_order_tbsc_create_time,
     tb_bookstore_order_tbsc_update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -23,10 +24,10 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="person.liufan.bookstore.entity.BookstoreOrderShoppingCart">
-    insert into tb_bookstore_order_tbsc (id, tb_bookstore_order_tbsc_book_id, tb_bookstore_order_tbsc_book_count, 
+    insert into tb_bookstore_order_tbsc (id, tb_bookstore_order_tbsc_order_id,tb_bookstore_order_tbsc_book_id, tb_bookstore_order_tbsc_book_count,
       tb_bookstore_order_tbsc_create_time, tb_bookstore_order_tbsc_update_time
       )
-    values (#{id,jdbcType=BIGINT}, #{tbBookstoreOrderTbscBookId,jdbcType=BIGINT}, #{tbBookstoreOrderTbscBookCount,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=BIGINT}, #{tbBookstoreOrderTbscOrderId,jdbcType=BIGINT} ,#{tbBookstoreOrderTbscBookId,jdbcType=BIGINT}, #{tbBookstoreOrderTbscBookCount,jdbcType=INTEGER},
       #{tbBookstoreOrderTbscCreateTime,jdbcType=TIMESTAMP}, #{tbBookstoreOrderTbscUpdateTime,jdbcType=TIMESTAMP}
       )
   </insert>
@@ -35,6 +36,9 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="tbBookstoreOrderTbscOrderId != null">
+        tb_bookstore_order_tbsc_order_id,
       </if>
       <if test="tbBookstoreOrderTbscBookId != null">
         tb_bookstore_order_tbsc_book_id,
@@ -53,6 +57,9 @@
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
+      <if test="tbBookstoreOrderTbscOrderId != null">
+        #{tbBookstoreOrderTbscOrderId,jdbcType=BIGINT},
+      </if>
       <if test="tbBookstoreOrderTbscBookId != null">
         #{tbBookstoreOrderTbscBookId,jdbcType=BIGINT},
       </if>
@@ -70,6 +77,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="person.liufan.bookstore.entity.BookstoreOrderShoppingCart">
     update tb_bookstore_order_tbsc
     <set>
+      <if test="tbBookstoreOrderTbscOrderId != null">
+        tb_bookstore_order_tbsc_order_id = #{tbBookstoreOrderTbscOrderId,jdbcType=BIGINT},
+      </if>
       <if test="tbBookstoreOrderTbscBookId != null">
         tb_bookstore_order_tbsc_book_id = #{tbBookstoreOrderTbscBookId,jdbcType=BIGINT},
       </if>
@@ -87,7 +97,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="person.liufan.bookstore.entity.BookstoreOrderShoppingCart">
     update tb_bookstore_order_tbsc
-    set tb_bookstore_order_tbsc_book_id = #{tbBookstoreOrderTbscBookId,jdbcType=BIGINT},
+    set tb_bookstore_order_tbsc_order_id = #{tbBookstoreOrderTbscOrderId,jdbcType=BIGINT},tb_bookstore_order_tbsc_book_id = #{tbBookstoreOrderTbscBookId,jdbcType=BIGINT},
       tb_bookstore_order_tbsc_book_count = #{tbBookstoreOrderTbscBookCount,jdbcType=INTEGER},
       tb_bookstore_order_tbsc_create_time = #{tbBookstoreOrderTbscCreateTime,jdbcType=TIMESTAMP},
       tb_bookstore_order_tbsc_update_time = #{tbBookstoreOrderTbscUpdateTime,jdbcType=TIMESTAMP}

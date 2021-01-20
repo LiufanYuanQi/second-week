@@ -58,7 +58,7 @@
         #{id,jdbcType=BIGINT},
       </if>
       <if test="tbBookstoreOrderUserId != null">
-        #{tb_bookstore_order_user_id,jdbcType=BIGINT},
+        #{tbBookstoreOrderUserId,jdbcType=BIGINT},
       </if>
       <if test="tbBookstoreOrderTotalMoney != null">
         #{tbBookstoreOrderTotalMoney,jdbcType=DECIMAL},
