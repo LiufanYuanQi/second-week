@@ -1,6 +1,10 @@
 package person.liufan.bookstore.mapper;
 
 import person.liufan.bookstore.entity.BookstoreBook;
+import person.liufan.bookstore.entity.BookstoreUser;
+
+import java.util.List;
+
 /**
  * @author liufan E-mail:fan.liu@biz-united.com.cn
  * @version 创建时间：2021/1/18
@@ -48,4 +52,25 @@ public interface BookstoreBookMapper {
      * @return 1成功，0失败
      */
     int updateByPrimaryKey(BookstoreBook record);
+
+    /**
+     * 通过书名进行查询
+     * @param tbBookstoreBookName 书名
+     * @return 查询结果
+     */
+    BookstoreUser selectByName(String tbBookstoreBookName);
+
+    /**
+     * 通过id进行查询，id没有全表查询
+     * @param book id
+     * @return 查询结果
+     */
+    List<BookstoreUser> listUserById(BookstoreBook book);
+
+    /**
+     * 通过ids进行批量删除
+     * @param ids ids
+     * @return 删除结果
+     */
+    int deleteByIds(String[] ids);
 }

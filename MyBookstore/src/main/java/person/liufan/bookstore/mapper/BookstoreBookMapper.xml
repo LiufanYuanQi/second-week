@@ -18,15 +18,38 @@
     tb_bookstore_book_price, tb_bookstore_book_number, tb_bookstore_book_info, tb_bookstore_book_picture_url, 
     tb_bookstore_book_create_time, tb_bookstore_book_update_time
   </sql>
+  <select id="listUserById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_bookstore_book
+    <where>
+      <if test="id != null and id !='' ">
+        and id = #{id,jdbcType=BIGINT}
+      </if>
+    </where>
+  </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from tb_bookstore_book
     where id = #{id,jdbcType=BIGINT}
   </select>
+  <select id="selectByName" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_bookstore_book
+    where tb_bookstore_book_name = #{tbBookstoreBookName}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from tb_bookstore_book
     where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByIds" parameterType="java.lang.String" >
+    delete from tb_bookstore_book
+    where id IN
+    <foreach collection="array" item="id" open="(" close=")" separator=",">
+      #{id}
+    </foreach>
   </delete>
   <insert id="insert" parameterType="person.liufan.bookstore.entity.BookstoreBook">
     insert into tb_bookstore_book (id, tb_bookstore_book_name, tb_bookstore_book_author, 

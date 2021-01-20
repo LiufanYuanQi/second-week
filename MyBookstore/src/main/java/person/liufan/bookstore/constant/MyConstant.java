@@ -45,4 +45,9 @@ public class MyConstant {
      */
     public static final String LOGIN_FLAG = "flag";
     public static final String LOGIN_USER = "user";
+    public static final String PARAMETER_AUTHOR = "author";
+    public static final String PARAMETER_PUBLISHING = "publishing";
+    public static final String PARAMETER_PRICE = "price";
+    public static final String PARAMETER_NUMBER = "number";
+    public static final String PARAMETER_INFO = "info";
 }
