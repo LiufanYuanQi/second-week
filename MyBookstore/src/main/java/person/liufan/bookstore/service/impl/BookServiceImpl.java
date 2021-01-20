@@ -30,12 +30,12 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public PageInfo<BookstoreUser> listUserDetailByName(Long id, int pageNum, int pageSize) {
+    public PageInfo<BookstoreBook> listBookDetailByName(Long id, int pageNum, int pageSize) {
         BookstoreBook book = new BookstoreBook();
         book.setId(id);
         PageHelper.startPage(pageNum, pageSize);
-        List<BookstoreUser> list = bookMapper.listUserById(book);
-        PageInfo<BookstoreUser> pageInfo = new PageInfo<>(list);
+        List<BookstoreBook> list = bookMapper.listBookById(book);
+        PageInfo<BookstoreBook> pageInfo = new PageInfo<>(list);
         return pageInfo;
     }
 

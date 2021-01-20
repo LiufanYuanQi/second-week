@@ -23,7 +23,7 @@ public interface BookService {
      * @param pageSize 每页大小
      * @return 查询结果
      */
-    PageInfo<BookstoreUser> listUserDetailByName(Long id, int pageNum, int pageSize);
+    PageInfo<BookstoreBook> listBookDetailByName(Long id, int pageNum, int pageSize);
 
     /**
      * 通过主键进行查询

@@ -65,7 +65,7 @@ public interface BookstoreBookMapper {
      * @param book id
      * @return 查询结果
      */
-    List<BookstoreUser> listUserById(BookstoreBook book);
+    List<BookstoreBook> listBookById(BookstoreBook book);
 
     /**
      * 通过ids进行批量删除

@@ -61,6 +61,7 @@
 					url: "/bookManagement",
 					type: "post",
 					data: {
+						type: "save",
 						name: $("#add-name").val(),
 						author: $("#add-author").val(),
 						publishing: $("#add-publishing").val(),
@@ -161,7 +162,7 @@
 		 * address
 		 * hobbies
 		 */
-		$("#editUser").click(function () {
+		$("#editBook").click(function () {
 			if ($("input[name=check]:checked").length == 0) {
 				alert("请选择要修改的数据");
 			} else if ($("input[name=check]:checked").length != 1) {
@@ -183,12 +184,12 @@
 					* */
 					success(data) {
 						let obj = $.parseJSON(data);
-						$("#add-name").val(obj.user);
-						$("#add-author").val(obj.user);
-						$("#add-publishing").val(obj.user);
-						$("#add-price").val(obj.user);
-						$("#add-number").val(obj.user);
-						$("#add-info").val(obj.user);
+						$("#edit-name").val(obj.tbBookstoreBookName);
+						$("#edit-author").val(obj.tbBookstoreBookAuthor);
+						$("#edit-publishing").val(obj.tbBookstoreBookPublishing);
+						$("#edit-price").val(obj.tbBookstoreBookPrice);
+						$("#edit-number").val(obj.tbBookstoreBookNumber);
+						$("#edit-info").val(obj.tbBookstoreBookInfo);
 					}
 				})
 			}
@@ -199,18 +200,19 @@
 		 * 信息填写完毕，点击提交进行表单验证，验证成功提交数据
 		 */
 		$("#edit-submitBtn").click(function () {
-			if (editFormCheck()) {
+			if (true) {
 				$.ajax({
 					url: "/bookManagement",
 					type: "post",
 					data: {
+						type: "update",
 						id: $("input[name=check]:checked").val(),
-						name: $("#add-name").val(),
-						author: $("#add-author").val(),
-						publishing: $("#add-publishing").val(),
-						price: $("#add-price").val(),
-						number: $("#add-number").val(),
-						info: $("#add-info").val()
+						name: $("#edit-name").val(),
+						author: $("#edit-author").val(),
+						publishing: $("#edit-publishing").val(),
+						price: $("#edit-price").val(),
+						number: $("#edit-number").val(),
+						info: $("#edit-info").val()
 					},
 					success(data) {
 						if ($.parseJSON(data)) {
@@ -219,6 +221,7 @@
 							alert("账号修改失败");
 						}
 						$("#editUserModal").modal("hide");
+						getFromByPage();
 					}
 				});
 			} else {
@@ -226,7 +229,7 @@
 			}
 		});
 
-		$("#deleteUser").click(function () {
+		$("#deleteBook").click(function () {
 			var deleteList = "";
 			if ($("input[name=check]:checked").length == 0) {
 				alert("请选择删除的数据");
@@ -289,7 +292,7 @@
 		/**
 		 * 添加表单验证方法，验证成功返回true
 		 * */
-		function editFormCheck() {
+		/*function editFormCheck() {
 			let flag = true;
 			if (($("#edit-name").val()) == null) {
 				alert("用户名不能为空");
@@ -350,15 +353,15 @@
 				flag = false;
 			}
 			return flag;
-		}
+		}*/
 
 		function setHidden() {
-			$("#userId").val($("#selectUserId").val())
+			$("#bookId").val($("#selectBookId").val())
 		}
 
 		function resetQuery() {
-			$("#userId").val("");
-			$("#selectUserId").val("");
+			$("#bookId").val("");
+			$("#selectBookId").val("");
 		}
 
 		function getForm() {
@@ -375,7 +378,7 @@
 			$.ajax({
 				data: {
 					type: "queryDetail",
-					id: $("#userId").val(),
+					id: $("#bookId").val(),
 					pageNum: $("#currentPage").val(),
 					pageSize: $("#currentPageSize").val()
 				},
@@ -387,13 +390,14 @@
 						$("#detailTbl").append("<tr class=\"active\">\n" +
 								"<td><input name='check' value='" + n.id + "' type=\"checkbox\" /></td>\n" +
 								"<td>" + n.id + "</td>\n" +
-								"<td>" + n.tbBookstoreUserName + "</td>\n" +
-								"<td>" + n.tbBookstoreUserRealName + "</td>\n" +
-								"<td>" + n.tbBookstoreUserPhone + "</td>\n" +
-								"<td>" + n.tbBookstoreUserProvinceAndCity + "</td>\n" +
-								"<td>" + n.tbBookstoreUserAddress + "</td>\n" +
-								"<td>" + n.tbBookstoreUserHobby + "</td>\n" +
-								"<td>" + n.tbBookstoreUserCreateTime + "</td>\n" +
+								"<td>" + "图片" + "</td>\n" +
+								"<td>" + n.tbBookstoreBookName + "</td>\n" +
+								"<td>" + n.tbBookstoreBookAuthor + "</td>\n" +
+								"<td>" + n.tbBookstoreBookPublishing + "</td>\n" +
+								"<td>" + n.tbBookstoreBookPrice + "</td>\n" +
+								"<td>" + n.tbBookstoreBookNumber + "</td>\n" +
+								"<td>" + n.tbBookstoreBookInfo + "</td>\n" +
+								"<td>" + n.tbBookstoreBookCreateTime + "</td>\n" +
 								"</tr>");
 					});
 					$("#page").empty();
@@ -555,9 +559,9 @@
 	</div>
 
 	<ul class="nav nav-tabs" >
-		<li role="presentation"><a href="#">用户管理</a></li>
-		<li role="presentation" class="active"><a href="#">图书管理</a></li>
-		<li role="presentation"><a href="#">退出</a></li>
+		<li role="presentation" id="userManagement"><a href="#">用户管理</a></li>
+		<li role="presentation" class="active" id="bookManagement"><a href="#">图书管理</a></li>
+		<li role="presentation" id="exit"><a href="#">退出</a></li>
 	</ul>
 	
 	<div>
@@ -573,7 +577,7 @@
 				<form class="form-inline" role="form" style="position: relative;top: 8%; left: 5px;">
 				  <div class="form-group">
 				    <div class="input-group">
-				      <div class="input-group-addon">用户id</div>
+				      <div class="input-group-addon">图书id</div>
 				      <input id="bookId" type="hidden">
 				      <input id="selectBookId" class="form-control" type="text">
 				    </div>

@@ -18,7 +18,7 @@
     tb_bookstore_book_price, tb_bookstore_book_number, tb_bookstore_book_info, tb_bookstore_book_picture_url, 
     tb_bookstore_book_create_time, tb_bookstore_book_update_time
   </sql>
-  <select id="listUserById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="listBookById" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from tb_bookstore_book

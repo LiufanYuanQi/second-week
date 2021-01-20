@@ -8,6 +8,7 @@ import person.liufan.bookstore.entity.BookstoreBook;
 import person.liufan.bookstore.entity.BookstoreUser;
 import person.liufan.bookstore.service.BookService;
 import person.liufan.bookstore.util.MyPrintOut;
+import person.liufan.bookstore.vo.BookDetaillVO;
 import person.liufan.bookstore.vo.UserDetailVO;
 
 import javax.servlet.ServletException;
@@ -16,12 +17,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author liufan E-mail:fan.liu@biz-united.com.cn
@@ -74,10 +74,25 @@ public class BookManagementServlet extends HttpServlet {
             }
             int pageNum = Integer.parseInt(request.getParameter("pageNum"));
             int pageSize = Integer.parseInt(request.getParameter("pageSize"));
-            PageInfo<BookstoreUser> pageInfo = bookService.listUserDetailByName(id,pageNum,pageSize);
+            PageInfo<BookstoreBook> pageInfo = bookService.listBookDetailByName(id,pageNum,pageSize);
             Map map = new HashMap(8);
-            map.put("count", pageInfo.getTotal());
-            map.put("data", pageInfo.getList());
+            List<BookstoreBook> list = pageInfo.getList();
+            Long count = pageInfo.getTotal();
+            List<BookDetaillVO> voList = new ArrayList<>(Math.toIntExact(count));
+            for (BookstoreBook book : list) {
+                BookDetaillVO vo = new BookDetaillVO();
+                vo.setId(book.getId());
+                vo.setTbBookstoreBookName(book.getTbBookstoreBookName());
+                vo.setTbBookstoreBookPublishing(book.getTbBookstoreBookPublishing());
+                vo.setTbBookstoreBookPrice(book.getTbBookstoreBookPrice());
+                vo.setTbBookstoreBookNumber(book.getTbBookstoreBookNumber());
+                vo.setTbBookstoreBookInfo(book.getTbBookstoreBookInfo());
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                vo.setTbBookstoreBookCreateTime(simpleDateFormat.format(book.getTbBookstoreBookCreateTime()));
+                voList.add(vo);
+            }
+            map.put("count", count);
+            map.put("data", voList);
             MyPrintOut.printJson(response, map);
         }
         /**
@@ -123,7 +138,6 @@ public class BookManagementServlet extends HttpServlet {
         book.setTbBookstoreBookPrice(bigDecimalPrice);
         book.setTbBookstoreBookNumber(Integer.valueOf(number));
         book.setTbBookstoreBookInfo(info);
-
 
         return book;
     }
