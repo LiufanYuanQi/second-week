@@ -13,15 +13,53 @@
     id, tb_bookstore_shopping_cart_user_id, tb_bookstore_shopping_cart_book_id, tb_bookstore_shopping_cart_book_count, 
     tb_bookstore_shopping_cart_create_time, tb_bookstore_shopping_cart_update_time
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="listCartById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_bookstore_shopping_cart
+    <where>
+      <if test="id != null and id !='' ">
+        and id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="tbBookstoreShoppingCartUserId != null and tbBookstoreShoppingCartUserId !='' ">
+        and tb_bookstore_shopping_cart_user_id = #{tbBookstoreShoppingCartUserId,jdbcType=BIGINT}
+      </if>
+    </where>
+  </select>
+  <select id="selectByUserIdAndBookId" resultMap="BaseResultMap">
     select 
+    <include refid="Base_Column_List" />
+    from tb_bookstore_shopping_cart
+    where
+    tb_bookstore_shopping_cart_user_id = #{tbBookstoreShoppingCartUserId,jdbcType=BIGINT}
+    and
+    tb_bookstore_shopping_cart_book_id = #{tbBookstoreShoppingCartBookId,jdbcType=BIGINT}
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
     <include refid="Base_Column_List" />
     from tb_bookstore_shopping_cart
     where id = #{id,jdbcType=BIGINT}
   </select>
+  <select id="selectByIds" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_bookstore_shopping_cart
+    where id IN
+    <foreach collection="array" item="id" open="(" close=")" separator=",">
+      #{id}
+    </foreach>
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from tb_bookstore_shopping_cart
     where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByIds" parameterType="java.lang.Long">
+    delete from tb_bookstore_shopping_cart
+    where id IN
+    <foreach collection="array" item="id" open="(" close=")" separator=",">
+      #{id}
+    </foreach>
   </delete>
   <insert id="insert" parameterType="person.liufan.bookstore.entity.BookstoreShoppingCart">
     insert into tb_bookstore_shopping_cart (id, tb_bookstore_shopping_cart_user_id, 

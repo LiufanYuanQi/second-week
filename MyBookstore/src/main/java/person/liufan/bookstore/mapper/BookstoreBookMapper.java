@@ -1,6 +1,7 @@
 package person.liufan.bookstore.mapper;
 
 import person.liufan.bookstore.entity.BookstoreBook;
+import person.liufan.bookstore.entity.BookstoreShoppingCart;
 import person.liufan.bookstore.entity.BookstoreUser;
 
 import java.util.List;
@@ -73,4 +74,6 @@ public interface BookstoreBookMapper {
      * @return 删除结果
      */
     int deleteByIds(String[] ids);
+
+
 }

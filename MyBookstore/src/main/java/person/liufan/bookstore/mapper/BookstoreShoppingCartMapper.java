@@ -1,6 +1,9 @@
 package person.liufan.bookstore.mapper;
 
 import person.liufan.bookstore.entity.BookstoreShoppingCart;
+
+import java.util.List;
+
 /**
  * @author liufan E-mail:fan.liu@biz-united.com.cn
  * @version 创建时间：2021/1/18
@@ -43,4 +46,31 @@ public interface BookstoreShoppingCartMapper {
      * @return 1成功，0失败
      */
     int updateByPrimaryKey(BookstoreShoppingCart record);
+
+    /**
+     * 通过用户id和图书id查询购物车中是否有这条记录
+     * @param query 查询条件
+     * @return 查询结果
+     */
+    BookstoreShoppingCart selectByUserIdAndBookId(BookstoreShoppingCart query);
+
+    /**
+     * 通过ids删除记录
+     * @param ids ids
+     * @return 操作结果
+     */
+    int deleteByIds(String[] ids);
+
+    /**
+     * 通过ids查询记录
+     * @param ids ids
+     * @return 查询结果
+     */
+    List<BookstoreShoppingCart> selectByIds(String[] ids);
+    /**
+     * 通过id进行查询，如果id不存在则全表查询
+     * @param cart id
+     * @return 查询结果
+     */
+    List<BookstoreShoppingCart> listCartById(BookstoreShoppingCart cart);
 }

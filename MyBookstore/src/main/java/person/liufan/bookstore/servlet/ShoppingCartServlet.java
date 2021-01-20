@@ -1,13 +1,17 @@
 package person.liufan.bookstore.servlet;
 
+import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 import person.liufan.bookstore.constant.MyConstant;
 import person.liufan.bookstore.entity.BookstoreBook;
 import person.liufan.bookstore.entity.BookstoreShoppingCart;
+import person.liufan.bookstore.entity.BookstoreUser;
 import person.liufan.bookstore.service.BookService;
 import person.liufan.bookstore.service.ShoppingCartService;
 import person.liufan.bookstore.util.MyPrintOut;
+import person.liufan.bookstore.vo.BookDetaillVO;
+import person.liufan.bookstore.vo.CartVO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,9 +19,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author liufan E-mail:fan.liu@biz-united.com.cn
@@ -36,6 +39,8 @@ public class ShoppingCartServlet extends HttpServlet {
         WebApplicationContext ac = (WebApplicationContext) this.getServletContext().getAttribute(attr);
         BookService bookService = (BookService) ac.getBean("bookServiceImpl");
         ShoppingCartService shoppingCartService = (ShoppingCartService) ac.getBean("shoppingCartServiceImpl");
+        BookstoreUser user = (BookstoreUser) request.getSession().getAttribute("user");
+        Long userId = user.getId();
         String type = request.getParameter(MyConstant.TYPE);
         /**
          * 处理批量将书本添加到购物车的请求，前端将批量发送添加的书本ids，
@@ -47,7 +52,7 @@ public class ShoppingCartServlet extends HttpServlet {
         if (MyConstant.TYPE_ADD_TO_SHOPPING_CART.equals(type)) {
             String param = request.getParameter("addList");
             String[] ids = param.split("&");
-            Map rest = shoppingCartService.addToCartByBookId(ids);
+            Map rest = shoppingCartService.addToCartByBookId(ids,userId);
             MyPrintOut.printJson(response, rest);
         }
         /**
@@ -58,6 +63,7 @@ public class ShoppingCartServlet extends HttpServlet {
         if (MyConstant.TYPE_SAVE.equals(type)) {
             BookstoreShoppingCart cart = toCart(request);
             cart.setTbBookstoreShoppingCartCreateTime(new Date());
+            cart.setTbBookstoreShoppingCartUserId(userId);
             Boolean flag = shoppingCartService.sava(cart);
             MyPrintOut.printJson(response,flag);
         }
@@ -77,7 +83,7 @@ public class ShoppingCartServlet extends HttpServlet {
          */
         if (MyConstant.TYPE_UPDATE.equals(type)) {
             BookstoreShoppingCart cart = toCart(request);
-            cart.setId(Long.valueOf(request.getParameter(MyConstant.PARAMETER_ID)));
+            cart.setId(Long.valueOf(request.getParameter("bookId")));
             cart.setTbBookstoreShoppingCartUpdateTime(new Date());
             boolean flag = shoppingCartService.updateById(cart);
             MyPrintOut.printJson(response, flag);
@@ -88,7 +94,7 @@ public class ShoppingCartServlet extends HttpServlet {
         if (MyConstant.TYPE_DELETE.equals(type)) {
             String param = request.getParameter("deleteList");
             String[] ids = param.split("&");
-            Boolean flag = shoppingCartService.deleteUserByIds(ids);
+            Boolean flag = shoppingCartService.deleteCartByIds(ids);
             MyPrintOut.printJson(response, flag);
         }
         /**
@@ -104,10 +110,39 @@ public class ShoppingCartServlet extends HttpServlet {
             Map map = shoppingCartService.createOrderByIds(ids);
             MyPrintOut.printJson(response,map);
         }
+        if (MyConstant.TYPE_QUERY_DETAIL.equals(type)) {
+            String cartId = request.getParameter(MyConstant.PARAMETER_ID);
+            Long id = null;
+            if (cartId != null && cartId != "") {
+                id = Long.valueOf(cartId);
+            }
+            int pageNum = Integer.parseInt(request.getParameter("pageNum"));
+            int pageSize = Integer.parseInt(request.getParameter("pageSize"));
+            PageInfo<BookstoreShoppingCart> pageInfo = shoppingCartService.listCartDetailByName(id,userId,pageNum,pageSize);
+            Map map = new HashMap(8);
+            List<BookstoreShoppingCart> list = pageInfo.getList();
+            Long count = pageInfo.getTotal();
+            List<CartVO> voList = new ArrayList<>(Math.toIntExact(count));
+            for (BookstoreShoppingCart cart : list) {
+                CartVO vo = new CartVO();
+                BookstoreBook book = bookService.selectById(cart.getTbBookstoreShoppingCartBookId());
+                vo.setId(cart.getId());
+                vo.setTbBookstoreBookName(book.getTbBookstoreBookName());
+                vo.setTbBookstoreBookPrice(book.getTbBookstoreBookPrice());
+                vo.setTbBookstoreShoppingCartBookCount(cart.getTbBookstoreShoppingCartBookCount());
+                voList.add(vo);
+            }
+            map.put("count", count);
+            map.put("data", voList);
+            MyPrintOut.printJson(response, map);
+        }
 
     }
 
     private BookstoreShoppingCart toCart(HttpServletRequest request) {
-        return new BookstoreShoppingCart();
+        BookstoreShoppingCart cart = new BookstoreShoppingCart();
+        cart.setTbBookstoreShoppingCartBookId(Long.valueOf(request.getParameter("bookId")));
+        cart.setTbBookstoreShoppingCartBookCount(Integer.valueOf(request.getParameter("bookCount")));
+        return cart;
     }
 }

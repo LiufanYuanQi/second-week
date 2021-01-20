@@ -1,5 +1,6 @@
 package person.liufan.bookstore.service;
 
+import com.github.pagehelper.PageInfo;
 import person.liufan.bookstore.entity.BookstoreShoppingCart;
 
 import java.util.Map;
@@ -16,9 +17,10 @@ public interface ShoppingCartService {
      * 当部分保存时候返回结果，flag为true，并提示message
      * 当全部保存失败时，返回结果为false，并提示消息
      * @param ids 需要添加到购物车的ids
+     * @param userId 用户id
      * @return 是否添加成功
      */
-    Map addToCartByBookId(String[] ids);
+    Map addToCartByBookId(String[] ids,Long userId);
 
     /**
      * 处理保存请求，将前端发送的书本id，数量，和后端获取的用户id进行绑定
@@ -48,7 +50,7 @@ public interface ShoppingCartService {
      * @param ids ids
      * @return 删除结果
      */
-    Boolean deleteUserByIds(String[] ids);
+    Boolean deleteCartByIds(String[] ids);
 
     /**
      * 通过主键id返回书籍信息购物车信息，用于前端渲染页面
@@ -60,4 +62,14 @@ public interface ShoppingCartService {
      *              messageList，
      */
     Map createOrderByIds(String[] ids);
+
+    /**
+     * 通过分页查询所有的cart
+     * @param id id
+     * @param userId userId
+     * @param pageNum pageNum
+     * @param pageSize pageSize
+     * @return
+     */
+    PageInfo<BookstoreShoppingCart> listCartDetailByName(Long id,Long userId, int pageNum, int pageSize);
 }
