@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<link href="../../js/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+<link href="../../js/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" type="text/css" rel="stylesheet" />
+
+<script type="text/javascript" src="../../js/jquery/jquery-1.11.1-min.js"></script>
+<script type="text/javascript" src="../../js/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../js/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="../../js/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
+
+
+<script type="text/javascript">
+
+	$(function () {
+		getForm();
+		$("#selectBtn").click(function () {
+			setHidden();
+			getForm();
+		});
+		$("#resetBtn").click(function () {
+			resetQuery();
+			getForm();
+		});
+
+		/**
+		 * 分页按钮
+		 * */
+		$("#page").on("click", ".entity", function () {
+			$("#currentPage").val($(this).val() + 1);
+			getFromByPage();
+		})
+		$("#page").on("click", "#previous", function () {
+			if ($("#currentPage").val() > 1) {
+				$("#currentPage").val($("#currentPage").val() - 1);
+			}
+			getFromByPage();
+		})
+		$("#page").on("click", "#next", function () {
+			if (parseInt($("#currentPage").val()) < parseInt($("#allPage").val())) {
+				$("#currentPage").val(parseInt($("#currentPage").val()) + 1);
+			}
+			getFromByPage();
+		})
+		$("#pageSizes").change(function (data) {
+			$("#currentPageSize").val(data.target.value);
+			$("#currentPage").val(1);
+			getFromByPage();
+		});
+
+		$("#shoppingIndex").click(function () {
+			window.location.href = "book-shopping.html";
+		});
+		$("#bookShoppingCart").click(function () {
+			window.location.href = "book-shopping-cart.html";
+		})
+		$("#bookOrder")
+		$("#exit").click(function () {
+			$.ajax({
+				data: {
+					type: "exit"
+				},
+				url: "/userManagement",
+				type: "post",
+				success(data) {
+					if ($.parseJSON(data)){
+						window.location.href = "../login.html";
+					}
+				}
+			});
+		})
+
+		function setHidden() {
+			$("#bookId").val($("#selectBookId").val())
+		}
+
+		function resetQuery() {
+			$("#bookId").val("");
+			$("#selectBookId").val("");
+		}
+
+		function getForm() {
+			$("#currentPage").val(1);
+			$("#currentPageSize option[value=10]").prop("selected", true);
+			ajaxGetForm();
+		}
+
+		function getFromByPage() {
+			ajaxGetForm();
+		}
+
+		function ajaxGetForm() {
+			$.ajax({
+				data: {
+					type: "queryDetail",
+					id: $("#bookId").val(),
+					pageNum: $("#currentPage").val(),
+					pageSize: $("#currentPageSize").val()
+				},
+				type: "post",
+				url: "/order",
+				success(data) {
+					$("#orderTable").empty();
+					$.each($.parseJSON(data).data, function (i, n) {
+						var orderId = n.id;
+						var id = '#' + orderId;
+						$("#orderTable").append("<table class='table table-hover'>" +
+								"<thead>" +
+								"<tr style='color: #B3B3B3;'>" +
+								"<td>商品名称</td>\n" +
+								"<td>商品单价</td>" +
+								"<td>购买数量</td>" +
+								"<td>金额</td>" +
+								"</tr>" +
+								"</thead>" +
+								"<tbody id="+ orderId +"></tbody></table>");
+						/**
+						 * 将订单的商品名称，商品单价，购买数量包装成list返回
+						 * */
+						$.each(n.cartVOS, function (i, v) {
+							$(id).append("<tr class='active'>" +
+									"<td>" + v.tbBookstoreBookName + "</td>" +
+									"<td>" + v.tbBookstoreBookPrice + "</td>" +
+									"<td>" + v.tbBookstoreShoppingCartBookCount + "</td>" +
+									"<td>" + v.tbBookstoreBookPrice * v.tbBookstoreShoppingCartBookCount + "</td>" +
+									"</tr>");
+						});
+						/**
+						 * 添加订单号，订单总价，下单时间，收货地址，
+						 * */
+						$(id).append("<tr class='active'>" +
+								"<td>" + n.id + "</td>" +
+								"<td>" + n.tbBookstoreOrderCreateTime + "</td>" +
+								"<td>" + n.tbBookstoreOrderShippingAddress + "</td>" +
+								"<td>" + n.tbBookstoreOrderTotalMoney + "</td>" +
+								"</tr>")
+
+					});
+
+
+					/**
+					 * 分页按钮的添加
+					 */
+					$("#page").empty();
+					$("#page").append("<li id='previous'>\n" +
+							"\t\t\t\t\t\t<a href=\"#\" aria-label=\"Previous\">\n" +
+							"\t\t\t\t\t\t\t<span aria-hidden=\"true\">&laquo;</span>\n" +
+							"\t\t\t\t\t\t</a>\n" +
+							"\t\t\t\t\t</li>");
+					for (var i = 0; i < $.parseJSON(data).count / $("#currentPageSize").val(); i++) {
+						$("#page").append(
+								"    <li class='entity' value=" + i + ">" +
+								"<a href=\"#\">" + (i + 1) + "</a></li>\n" +
+								"    <li>\n");
+						$("#allPage").val(i + 1);
+					}
+					displayPage();
+					$("#page").append("<li id='next'>\n" +
+							"\t\t\t\t\t\t<a href=\"#\" aria-label=\"Next\">\n" +
+							"\t\t\t\t\t\t\t<span aria-hidden=\"true\">&raquo;</span>\n" +
+							"\t\t\t\t\t\t</a>\n" +
+							"\t\t\t\t\t</li");
+				}
+			});
+		}
+
+		function displayPage() {
+			$("#displayPage").val("当前为第" + $("#currentPage").val() + "页，每页" +
+					$("#currentPageSize").val() + "条，共" +
+					$("#allPage").val() + "页");
+			$.each($("#page li"), function (i, n) {
+				n.classList.remove("active");
+			});
+			let index = $("#currentPage").val() - 1;
+			$(`#page li[value=${index}]`).addClass("active");
+		}
+
+	});
+</script>
+</head>
+<body>
+
+	<ul class="nav nav-tabs" >
+		<li role="presentation" class="active" id="shoppingIndex"><a href="#">首页</a></li>
+		<li role="presentation" id="bookShoppingCart"><a href="#">我的购物车</a></li>
+		<li role="presentation" id="bookOrder"><a href="#">我的订单</a></li>
+		<li role="presentation" id="exit"><a href="#">退出</a></li>
+	</ul>
+	
+	<div>
+		<div style="position: relative; left: 10px; top: -10px;">
+			<div class="page-header">
+				<h3>我的订单</h3>
+			</div>
+		</div>
+	</div>
+	<div style="position: relative; top: -20px; left: 0px; width: 100%; height: 100%;">
+		<div style="width: 100%; position: absolute;top: 5px; left: 10px;">
+			<div class="btn-toolbar" role="toolbar" style="height: 80px;">
+				<form class="form-inline" role="form" style="position: relative;top: 8%; left: 5px;">
+				  <div class="form-group">
+				    <div class="input-group">
+				      <div class="input-group-addon">订单id</div>
+				      <input id="bookId" type="hidden">
+				      <input id="selectBookId" class="form-control" type="text">
+				    </div>
+				  </div>
+				  	<button id="selectBtn" type="button" class="btn btn-default">查询</button>
+					<button id="resetBtn" type="button" class="btn btn-default">重置</button>
+				</form>
+			</div>
+			<!--详情表格-->
+			<div style="position: relative;top: 10px;" id="orderTable">
+				<table class="table table-hover">
+					<thead>
+						<tr style="color: #B3B3B3;">
+							<td>id</td>
+							<td>商品名称</td>
+							<td>商品单价</td>
+							<td>购买数量</td>
+							<td>金额</td>
+						</tr>
+					</thead>
+					<tbody>
+
+					</tbody>
+				</table>
+			</div>
+
+			<!--分页以后再做-->
+			<nav aria-label="Page navigation">
+				<div style="width: 300px">
+					<input type="hidden" id="currentPage" value="1">
+					<input type="hidden" id="currentPageSize" value="3">
+					<div style="width: 130px; position: relative; top: 80px">
+						每页
+						<select id="pageSizes" data-live-search="true" name="page" >
+							<option value="1">1</option>
+							<option value="3" selected="selected">3</option>
+							<option value="5">5</option>
+							<option value="10">10</option>
+						</select>条记录
+					</div>
+					<input type="text"class="form-group form-control" readonly="readonly" id="displayPage">
+
+				</div>
+				<input type="hidden" id="allPage">
+				<div style="position: relative;top: 100px">
+					<ul class="pagination" id="page">
+						<li>
+							<a href="#" aria-label="Previous">
+								<span aria-hidden="true">&laquo;</span>
+							</a>
+						</li>
+
+						<li>
+							<a href="#" aria-label="Next">
+								<span aria-hidden="true">&raquo;</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</nav>
+		</div>
+		
+	</div>
+</body>
+</html>

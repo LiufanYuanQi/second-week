@@ -1,5 +1,6 @@
 package person.liufan.bookstore.service;
 
+import com.github.pagehelper.PageInfo;
 import person.liufan.bookstore.entity.BookstoreOrder;
 
 /**
@@ -15,4 +16,14 @@ public interface OrderService {
      * @return 操作结果
      */
     Boolean sava(String[] ids, BookstoreOrder order);
+
+    /**
+     * 通过用户id，默认查询的id值查询所有的订单，
+     * @param id id
+     * @param userId 用户订单
+     * @param pageNum 页码
+     * @param pageSize 大小
+     * @return 查询结果
+     */
+    PageInfo<BookstoreOrder> listOrderDetailById(Long id, Long userId, int pageNum, int pageSize);
 }

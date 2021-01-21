@@ -1,5 +1,7 @@
 package person.liufan.bookstore.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Component;
 import person.liufan.bookstore.entity.*;
 import person.liufan.bookstore.mapper.*;
@@ -7,6 +9,7 @@ import person.liufan.bookstore.service.OrderService;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -87,6 +90,17 @@ public class OrderServiceImpl implements OrderService {
             shoppingCartMapper.deleteByPrimaryKey(Long.valueOf(ids[i]));
         }
         return null;
+    }
+
+    @Override
+    public PageInfo<BookstoreOrder> listOrderDetailById(Long id, Long userId, int pageNum, int pageSize) {
+        BookstoreOrder order = new BookstoreOrder();
+        order.setId(id);
+        order.setTbBookstoreOrderUserId(userId);
+        PageHelper.startPage(pageNum, pageSize);
+        List<BookstoreOrder> list = orderMapper.listOrderById(order);
+        PageInfo<BookstoreOrder> pageInfo = new PageInfo<>(list);
+        return pageInfo;
     }
 
     private OrderBook toOrderBook(BookstoreBook book) {

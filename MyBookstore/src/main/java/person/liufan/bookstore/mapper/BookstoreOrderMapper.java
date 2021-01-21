@@ -1,6 +1,9 @@
 package person.liufan.bookstore.mapper;
 
 import person.liufan.bookstore.entity.BookstoreOrder;
+
+import java.util.List;
+
 /**
  * @author liufan E-mail:fan.liu@biz-united.com.cn
  * @version 创建时间：2021/1/18
@@ -44,4 +47,11 @@ public interface BookstoreOrderMapper {
      * @return 1成功，0失败
      */
     int updateByPrimaryKey(BookstoreOrder record);
+
+    /**
+     * 通过id和用户id查询订单记录
+     * @param order 查询条件
+     * @return 查询结果
+     */
+    List<BookstoreOrder> listOrderById(BookstoreOrder order);
 }

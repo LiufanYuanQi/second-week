@@ -13,11 +13,17 @@
     id, tb_bookstore_order_tbsc_order_id,tb_bookstore_order_tbsc_book_id, tb_bookstore_order_tbsc_book_count, tb_bookstore_order_tbsc_create_time,
     tb_bookstore_order_tbsc_update_time
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="listByOrderId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from tb_bookstore_order_tbsc
-    where id = #{id,jdbcType=BIGINT}
+    where tb_bookstore_order_tbsc_order_id = #{tbBookstoreOrderTbscOrderId,jdbcType=BIGINT}
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_bookstore_order_tbsc
+    where tb_bookstore_order_tbsc_order_id = #{tbBookstoreOrderTbscOrderId,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from tb_bookstore_order_tbsc

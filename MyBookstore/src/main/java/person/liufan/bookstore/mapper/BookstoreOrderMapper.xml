@@ -13,8 +13,21 @@
     id,tb_bookstore_order_user_id, tb_bookstore_order_total_money, tb_bookstore_order_shipping_address, tb_bookstore_order_create_time,
     tb_bookstore_order_update_time
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="listOrderById" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
+    <include refid="Base_Column_List" />
+    from tb_bookstore_order
+    <where>
+      <if test="id != null and id !='' ">
+        and id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="tbBookstoreOrderUserId != null and tbBookstoreOrderUserId !='' ">
+        and tb_bookstore_order_user_id = #{tbBookstoreOrderUserId,jdbcType=BIGINT}
+      </if>
+    </where>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
     <include refid="Base_Column_List" />
     from tb_bookstore_order
     where id = #{id,jdbcType=BIGINT}

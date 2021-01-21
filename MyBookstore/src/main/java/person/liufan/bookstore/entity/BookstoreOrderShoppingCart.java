@@ -8,7 +8,7 @@ import java.util.Date;
  */
 public class BookstoreOrderShoppingCart {
     /**
-     * 订单关联的商品id
+     * id
      */
     private Long id;
     /**
