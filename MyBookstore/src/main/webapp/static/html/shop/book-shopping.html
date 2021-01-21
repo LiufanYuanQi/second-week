@@ -85,6 +85,7 @@
 					success(data) {
 						let obj = $.parseJSON(data);
 						$("#add-name").val(obj.tbBookstoreBookName);
+						$("#add-picture").prop("src", obj.tbBookstoreBookPictureUrl);
 						$("#add-author").val(obj.tbBookstoreBookAuthor);
 						$("#add-publishing").val(obj.tbBookstoreBookPublishing);
 						$("#add-price").val(obj.tbBookstoreBookPrice);
@@ -220,7 +221,7 @@
 						$("#detailTbl").append("<tr class=\"active\">\n" +
 								"<td><input name='check' value='" + n.id + "' type=\"checkbox\" /></td>\n" +
 								"<td>" + n.id + "</td>\n" +
-								"<td>" + "图片" + "</td>\n" +
+								"<td><img id=\"picture\" src=" + n.tbBookstoreBookPictureUrl  + " style=\"width: 50px;height: 30px;\"></td>\n" +
 								"<td>" + n.tbBookstoreBookName + "</td>\n" +
 								"<td>" + n.tbBookstoreBookAuthor + "</td>\n" +
 								"<td>" + n.tbBookstoreBookPublishing + "</td>\n" +
@@ -280,7 +281,7 @@
 					<h4 class="modal-title" id="myModalLabel1">添加图书</h4>
 				</div>
 				<div class="modal-body">
-					<div style="height: 450px">
+					<div style="height: 550px">
 						<div style="position: relative;top: 5%;left: 50%;margin-left: -150px">
 							<form class="form-horizontal" role="form" onsubmit="return false">
 								<div class="form-group">
@@ -289,7 +290,11 @@
 										<span class="input-group-addon" style="width: 50px">名称 </span>
 										<input type="text" readonly="readonly" id="add-name" class="form-control" placeholder="Name" aria-describedby="sizing-addon2" name="username">
 									</div>
-
+									<!--图片-->
+									<div class="input-group" style="width: 350px;position: relative;top: 10px">
+										<span class="input-group-addon" style="width: 50px">图片 </span>
+										<img id="add-picture" style="width: 150px;height: 100px;">
+									</div>
 									<!--作者输入框-->
 									<div class="input-group" style="width: 350px;position: relative;top: 10px">
 										<span class="input-group-addon"style="width: 50px"> 作者 </span>

@@ -44,7 +44,7 @@
 			$("#add-number").val("");
 			$("#add-info").val("");
 			$("#addBookModal").modal("show");
-
+			$("#add-picture").hide();
 		});
 		/**
 		 * 信息填写完毕，点击提交进行表单验证，验证成功提交数据
@@ -62,6 +62,7 @@
 					type: "post",
 					data: {
 						type: "save",
+						pictureUrl: $("#add-pictureUrl").val(),
 						name: $("#add-name").val(),
 						author: $("#add-author").val(),
 						publishing: $("#add-publishing").val(),
@@ -184,6 +185,8 @@
 					* */
 					success(data) {
 						let obj = $.parseJSON(data);
+						$("#edit-picture").show();
+						$("#edit-picture").prop("src", obj.tbBookstoreBookPictureUrl);
 						$("#edit-name").val(obj.tbBookstoreBookName);
 						$("#edit-author").val(obj.tbBookstoreBookAuthor);
 						$("#edit-publishing").val(obj.tbBookstoreBookPublishing);
@@ -207,6 +210,7 @@
 					data: {
 						type: "update",
 						id: $("input[name=check]:checked").val(),
+						pictureUrl: $("#edit-pictureUrl").val(),
 						name: $("#edit-name").val(),
 						author: $("#edit-author").val(),
 						publishing: $("#edit-publishing").val(),
@@ -375,6 +379,73 @@
 				}
 			});
 		})
+		/**
+		 * 上传图片到oss
+		 */
+		$("#add-files").change(function(){
+			$.ajax({
+				type: "get",
+				url: "/oss",
+				success(data) {
+					let obj = $.parseJSON(data);
+					var formData = new FormData();
+					formData.append("OSSAccessKeyId",obj.OSSAccessKeyId)
+					formData.append("expire",obj.expire)
+					formData.append("key",obj.key + "/" + $("#add-files")[0].files[0].name)
+					formData.append("policy",obj.policy)
+					formData.append("signature",obj.signature)
+					formData.append("file",$("#add-files")[0].files[0])
+					$.ajax({
+						data: formData,
+						type: "post",
+						url: obj.host,
+						contentType:false,
+						processData:false,
+						success() {
+							alert("上传成功");
+							$("#add-picture").show();
+							$("#add-picture").prop("src", obj.host + "/" + obj.key + "/" + $("#add-files")[0].files[0].name);
+							$("#add-modalBody")[0].style.height = "500px";
+							$("#add-pictureUrl").val(obj.host + "/" + obj.key + "/" + $("#add-files")[0].files[0].name);
+						}
+					})
+
+				}
+			});
+		})
+		$("#edit-files").change(function(){
+			$.ajax({
+				type: "get",
+				url: "/oss",
+				success(data) {
+					let obj = $.parseJSON(data);
+					var formData = new FormData();
+					var dir = obj.key + "/" + $("#edit-files")[0].files[0].name;
+					var url = obj.host + "/" + obj.key + "/" + $("#edit-files")[0].files[0].name;
+					formData.append("OSSAccessKeyId",obj.OSSAccessKeyId)
+					formData.append("expire",obj.expire)
+					formData.append("key", dir);
+					formData.append("policy",obj.policy)
+					formData.append("signature",obj.signature)
+					formData.append("file",$("#edit-files")[0].files[0])
+					$.ajax({
+						data: formData,
+						type: "post",
+						url: obj.host,
+						contentType:false,
+						processData:false,
+						success() {
+							alert("修改成功");
+							$("#edit-picture").show();
+							$("#edit-picture").prop("src", url);
+							$("#edit-pictureUrl").val(url);
+							console.log($("#edit-pictureUrl").val());
+						}
+					})
+
+				}
+			});
+		})
 
 		function setHidden() {
 			$("#bookId").val($("#selectBookId").val())
@@ -387,7 +458,7 @@
 
 		function getForm() {
 			$("#currentPage").val(1);
-			$("#currentPageSize option[value=3]").prop("selected", true);
+			$("#currentPageSize option[value=10]").prop("selected", true);
 			ajaxGetForm();
 		}
 
@@ -411,7 +482,7 @@
 						$("#detailTbl").append("<tr class=\"active\">\n" +
 								"<td><input name='check' value='" + n.id + "' type=\"checkbox\" /></td>\n" +
 								"<td>" + n.id + "</td>\n" +
-								"<td>" + "图片" + "</td>\n" +
+								"<td><img id=\"picture\" src=" + n.tbBookstoreBookPictureUrl  + " style=\"width: 50px;height: 30px;\"></td>\n" +
 								"<td>" + n.tbBookstoreBookName + "</td>\n" +
 								"<td>" + n.tbBookstoreBookAuthor + "</td>\n" +
 								"<td>" + n.tbBookstoreBookPublishing + "</td>\n" +
@@ -471,7 +542,7 @@
 					<h4 class="modal-title" id="myModalLabel1">添加图书</h4>
 				</div>
 				<div class="modal-body">
-					<div style="height: 400px">
+					<div id="add-modalBody" style="height: 400px">
 						<div style="position: relative;top: 5%;left: 50%;margin-left: -150px">
 							<form class="form-horizontal" role="form" onsubmit="return false">
 								<div class="form-group">
@@ -480,42 +551,44 @@
 										<span class="input-group-addon" style="width: 50px">名称 </span>
 										<input type="text" id="add-name" class="form-control" placeholder="Name" aria-describedby="sizing-addon2" name="username">
 									</div>
-
-									<!--作者输入框-->
+									<!--图片-->
 									<div class="input-group" style="width: 350px;position: relative;top: 10px">
+										<span class="input-group-addon" style="width: 50px">图片 </span>
+										<input id="add-pictureUrl" type="hidden">
+										<img id="add-picture" style="width: 150px;height: 100px;display: none"><input id="add-files" type="file" value="选择图片">
+									</div>
+									<!--作者输入框-->
+									<div class="input-group" style="width: 350px;position: relative;top: 20px">
 										<span class="input-group-addon"style="width: 50px"> 作者 </span>
 										<input type="text" id="add-author" class="form-control" placeholder="Author" aria-describedby="sizing-addon2" name="password">
 									</div>
 									<!--出版社输入框-->
-									<div class="input-group" style="width: 350px;position: relative;top: 20px">
+									<div class="input-group" style="width: 350px;position: relative;top: 30px">
 										<span class="input-group-addon" style="width: 50px"> 出版社</span>
 										<input type="text" id="add-publishing" class="form-control" placeholder="Publishing" aria-describedby="sizing-addon2" name="username">
 									</div>
 									<!--图书价格输入框-->
-									<div class="input-group" style="width: 350px;position: relative;top: 30px">
+									<div class="input-group" style="width: 350px;position: relative;top: 40px">
 										<span class="input-group-addon" style="width: 50px">价格</span>
 										<input type="text" id="add-price" class="form-control" placeholder="Price" aria-describedby="sizing-addon2" name="username">
 									</div>
 									<!--数量输入框-->
-									<div class="input-group" style="width: 350px; position: relative; top: 40px">
+									<div class="input-group" style="width: 350px; position: relative; top: 50px">
 										<span class="input-group-addon"style="width: 50px">数量</span>
 										<input type="text" id="add-number" class="form-control" placeholder="Number" aria-describedby="sizing-addon2" name="email">
 									</div>
 									<!--详情输入框-->
-									<div class="input-group" style="width: 350px; position: relative; top: 50px">
+									<div class="input-group" style="width: 350px; position: relative; top: 60px">
 										<span class="input-group-addon" style="width: 50px">详情</span>
 										<input type="text" id="add-info" class="form-control" placeholder="Info" aria-describedby="sizing-addon2">
 									</div>
 								</div>
 								<div class="form-group">
-									<button type="button" id="add-submitBtn" class="btn btn-primary btn-lg btn-block"  style="width: 350px; position: relative;top: 55px;">提交</button>
+									<button type="button" id="add-submitBtn" class="btn btn-primary btn-lg btn-block"  style="width: 350px; position: relative;top: 65px;">提交</button>
 								</div>
 							</form>
 						</div>
 					</div>
-
-
-
 				</div>
 			</div>
 		</div>
@@ -542,34 +615,40 @@
 										<span class="input-group-addon" style="width: 50px">名称 </span>
 										<input type="text" id="edit-name" class="form-control" placeholder="Name" aria-describedby="sizing-addon2" name="username">
 									</div>
-									<!--作者输入框-->
+									<!--图片-->
 									<div class="input-group" style="width: 350px;position: relative;top: 10px">
+										<span class="input-group-addon" style="width: 50px">图片 </span>
+										<input id="edit-pictureUrl" type="hidden">
+										<img id="edit-picture" style="width: 150px;height: 100px;display: none"><input id="edit-files" type="file" value="选择图片">
+									</div>
+									<!--作者输入框-->
+									<div class="input-group" style="width: 350px;position: relative;top: 20px">
 										<span class="input-group-addon"style="width: 50px"> 作者 </span>
 										<input type="text" id="edit-author" class="form-control" placeholder="Author" aria-describedby="sizing-addon2" name="password">
 									</div>
 									<!--出版社输入框-->
-									<div class="input-group" style="width: 350px;position: relative;top: 20px">
+									<div class="input-group" style="width: 350px;position: relative;top: 30px">
 										<span class="input-group-addon" style="width: 50px"> 出版社</span>
 										<input type="text" id="edit-publishing" class="form-control" placeholder="Publishing" aria-describedby="sizing-addon2" name="username">
 									</div>
 									<!--图书价格输入框-->
-									<div class="input-group" style="width: 350px;position: relative;top: 30px">
+									<div class="input-group" style="width: 350px;position: relative;top: 40px">
 										<span class="input-group-addon" style="width: 50px">价格</span>
 										<input type="text" id="edit-price" class="form-control" placeholder="Price" aria-describedby="sizing-addon2" name="username">
 									</div>
 									<!--数量输入框-->
-									<div class="input-group" style="width: 350px; position: relative; top: 40px">
+									<div class="input-group" style="width: 350px; position: relative; top: 50px">
 										<span class="input-group-addon"style="width: 50px">数量</span>
 										<input type="text" id="edit-number" class="form-control" placeholder="Number" aria-describedby="sizing-addon2" name="email">
 									</div>
 									<!--详情输入框-->
-									<div class="input-group" style="width: 350px;height: 50px; position: relative; top: 50px">
+									<div class="input-group" style="width: 350px;height: 50px; position: relative; top: 60px">
 										<span class="input-group-addon" style="width: 50px">详情</span>
 										<input type="text" id="edit-info" class="form-control" placeholder="Info" aria-describedby="sizing-addon2" style="height: 50px">
 									</div>
 								</div>
 								<div class="form-group">
-									<button type="button" id="edit-submitBtn" class="btn btn-primary btn-lg btn-block"  style="width: 350px; position: relative;top: 55px;">提交</button>
+									<button type="button" id="edit-submitBtn" class="btn btn-primary btn-lg btn-block"  style="width: 350px; position: relative;top: 65px;">提交</button>
 								</div>
 							</form>
 						</div>
@@ -642,14 +721,14 @@
 			<nav aria-label="Page navigation">
 				<div style="width: 300px">
 					<input type="hidden" id="currentPage" value="1">
-					<input type="hidden" id="currentPageSize" value="3">
+					<input type="hidden" id="currentPageSize" value="10">
 					<div style="width: 130px; position: relative; top: 80px">
 						每页
 						<select id="pageSizes" data-live-search="true" name="page" >
 							<option value="1">1</option>
-							<option value="3" selected="selected">3</option>
+							<option value="3">3</option>
 							<option value="5">5</option>
-							<option value="10">10</option>
+							<option value="10" selected="selected">10</option>
 						</select>条记录
 					</div>
 					<input type="text"class="form-group form-control" readonly="readonly" id="displayPage">

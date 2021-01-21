@@ -3,14 +3,27 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
+
   <display-name>Archetype Created Web Application</display-name>
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>classpath:applicationContext.xml</param-value>
   </context-param>
+  <filter>
+    <filter-name>CorsInterceptor</filter-name>
+    <filter-class>person.liufan.bookstore.filter.CorsInterceptor</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>CorsInterceptor</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
+
+
+
+
   <servlet>
     <servlet-name>loginServlet</servlet-name>
     <servlet-class>person.liufan.bookstore.servlet.LoginServlet</servlet-class>
@@ -38,6 +51,10 @@
   <servlet>
     <servlet-name>orderServlet</servlet-name>
     <servlet-class>person.liufan.bookstore.servlet.OrderServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>ossServlet</servlet-name>
+    <servlet-class>person.liufan.bookstore.servlet.OssServlet</servlet-class>
   </servlet>
 
 
@@ -68,5 +85,9 @@
   <servlet-mapping>
     <servlet-name>orderServlet</servlet-name>
     <url-pattern>/order</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ossServlet</servlet-name>
+    <url-pattern>/oss</url-pattern>
   </servlet-mapping>
 </web-app>
