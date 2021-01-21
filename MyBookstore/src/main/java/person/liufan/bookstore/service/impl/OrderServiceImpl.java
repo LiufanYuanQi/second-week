@@ -28,7 +28,12 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 将order订单保存，使用随机数生成订单号，当订单表订单号唯一时，保存
-     * 将ids对应的cart的信息保存到order_tbsc中，然后将这个订单号移除cart，然后将每个cart中的书籍信息持久化到order_book中
+     * 将ids对应的cart的信息保存到order_tbsc中，
+     * 然后将每个cart中的书籍信息持久化到order_book中，
+     * 更新库存，
+     * 然后将这个订单号移除cart，
+     *
+     *
      * @param ids 购物车中记录的id
      * @param order 订单信息
      * @return 操作结果
@@ -51,28 +56,44 @@ public class OrderServiceImpl implements OrderService {
 
         for (int i = 0; i < ids.length; i++) {
             //将ids的信息保存到order_tbsc中
+            //获取当前id的购物车记录
             BookstoreShoppingCart shoppingCart = shoppingCartMapper.selectByPrimaryKey(Long.valueOf(ids[i]));
+            //创建订单关系表，并保持
             BookstoreOrderShoppingCart orderShoppingCart = new BookstoreOrderShoppingCart();
             orderShoppingCart.setTbBookstoreOrderTbscOrderId(randomLong);
             orderShoppingCart.setTbBookstoreOrderTbscBookId(shoppingCart.getTbBookstoreShoppingCartBookId());
             orderShoppingCart.setTbBookstoreOrderTbscBookCount(shoppingCart.getTbBookstoreShoppingCartBookCount());
             orderShoppingCart.setTbBookstoreOrderTbscCreateTime(new Date());
             orderShoppingCartMapper.insertSelective(orderShoppingCart);
-            //将cart中的书籍信息持久化到order_book
+
+            //获取book数据
             Long bookId = shoppingCart.getTbBookstoreShoppingCartBookId();
             BookstoreBook book = bookMapper.selectByPrimaryKey(bookId);
+            //如果书籍信息不存在，将cart中的书籍信息持久化到order_book
             OrderBook orderBook = toOrderBook(book);
-            orderBookMapper.insertSelective(orderBook);
+            OrderBook rest = orderBookMapper.selectByPrimaryKey(orderBook.getId());
+            if (rest == null) {
+                orderBookMapper.insertSelective(orderBook);
+            }
+            //当前购买的数量
+            Integer count = shoppingCart.getTbBookstoreShoppingCartBookCount();
+            //当前书本的库存
+            Integer number = book.getTbBookstoreBookNumber();
+            //更新书本的库存
+            book.setTbBookstoreBookNumber(number - count);
+            //保存数据
+            bookMapper.updateByPrimaryKey(book);
             //删除出当前购物车中id为当前值得记录
             shoppingCartMapper.deleteByPrimaryKey(Long.valueOf(ids[i]));
         }
-
         return null;
     }
 
     private OrderBook toOrderBook(BookstoreBook book) {
         OrderBook orderBook = new OrderBook();
+        orderBook.setId(book.getId());
         orderBook.setTbBookstoreBookName(book.getTbBookstoreBookName());
+        orderBook.setTbBookstoreBookPictureUrl(book.getTbBookstoreBookPictureUrl());
         orderBook.setTbBookstoreBookAuthor(book.getTbBookstoreBookAuthor());
         orderBook.setTbBookstoreBookPublishing(book.getTbBookstoreBookPublishing());
         orderBook.setTbBookstoreBookPrice(book.getTbBookstoreBookPrice());
